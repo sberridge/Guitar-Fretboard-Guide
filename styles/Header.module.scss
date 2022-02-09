@@ -1,0 +1,10 @@
+.app-header {
+    background: #383838;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    &__title {
+        color: #fff;
+    }
+}
