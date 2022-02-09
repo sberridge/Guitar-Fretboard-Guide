@@ -10,7 +10,7 @@ export default class AudioPlayer {
         
         const ocilator = this.audioCtx.createOscillator();
         ocilator.frequency.value = frequency;
-        ocilator.type = "triangle";
+        ocilator.type = "square";
         const gain = this.audioCtx.createGain();
         ocilator.connect(gain);
         gain.connect(this.audioCtx.destination);

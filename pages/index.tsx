@@ -87,6 +87,84 @@ const tunings = {
           "note": "D",
           "octave": 2
       }
+  ],
+  "ddropd": [
+    {
+        "note": "D",
+        "octave": 4
+    },
+    {
+        "note": "B",
+        "octave": 3
+    },
+    {
+        "note": "G",
+        "octave": 3
+    },
+    {
+        "note": "D",
+        "octave": 3
+    },
+    {
+        "note": "A",
+        "octave": 2
+    },
+    {
+        "note": "D",
+        "octave": 2
+    }
+  ],
+  "dadgad": [
+    {
+        "note": "D",
+        "octave": 4
+    },
+    {
+        "note": "A",
+        "octave": 3
+    },
+    {
+        "note": "G",
+        "octave": 3
+    },
+    {
+        "note": "D",
+        "octave": 3
+    },
+    {
+        "note": "A",
+        "octave": 2
+    },
+    {
+        "note": "D",
+        "octave": 2
+    }
+  ],
+  "opend": [
+    {
+        "note": "D",
+        "octave": 4
+    },
+    {
+        "note": "A",
+        "octave": 3
+    },
+    {
+        "note": "F#",
+        "octave": 3
+    },
+    {
+        "note": "D",
+        "octave": 3
+    },
+    {
+        "note": "A",
+        "octave": 2
+    },
+    {
+        "note": "D",
+        "octave": 2
+    }
   ]
 }
 
@@ -224,7 +302,7 @@ frequencies.set('B',[
     7902
 ]);
 
-type availableTunings = "standard" | "dropd";
+type availableTunings = "standard" | "dropd" | "dadgad" | "ddropd" | "opend";
 
 const createStrings = () => {
   let stateStrings:guitarString[] = [];
@@ -263,6 +341,7 @@ const createStrings = () => {
 
 const tuneStrings = (tuning:availableTunings, strings:guitarString[]) => {
   let stateStrings:guitarString[] = [];
+  console.log(tuning);
   strings.forEach((string,stringNum)=>{
     const stringTune = tunings[tuning][stringNum];
     string.openNote = stringTune.note;
@@ -339,6 +418,9 @@ const Home: NextPage = () => {
     switch(tuning) {
       case "standard":
       case "dropd":
+      case "ddropd":
+      case "dadgad":
+      case "opend":
         tuneStrings(tuning, strings);
         break;
     }

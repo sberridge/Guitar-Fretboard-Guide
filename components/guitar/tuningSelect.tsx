@@ -10,6 +10,9 @@ export default function TuningSelect(props:tuningSelectProps) {
         <select onChange={props.onChange}>
             <option value="standard">Standard</option>
             <option value="dropd">Drop D</option>
+            <option value="ddropd">Double Drop D</option>
+            <option value="dadgad">DADGAD</option>
+            <option value="opend">Open D</option>
         </select>
     </div>
 }
