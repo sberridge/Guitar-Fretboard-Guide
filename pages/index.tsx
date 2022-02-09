@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import { ChangeEvent, useState } from 'react'
 import Fretboard from '../components/guitar/fretboard'
 import FretboardControls from '../components/guitar/fretboardControls'
-import TuningSelect from '../components/guitar/tuningSelect'
 import Layout from '../components/layout'
 
 
