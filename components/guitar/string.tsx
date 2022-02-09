@@ -19,6 +19,7 @@ type fret = {
 type guitarString = {
     openNote: string
     openOctave: number
+    openVisible: boolean
     frets: fret[]
 }
 
@@ -35,6 +36,7 @@ export default function GuitarString(props:guitarStringProps) {
         <OpenFret
             note={props.guitarString.openNote}
             octave={props.guitarString.openOctave}
+            visible={props.guitarString.openVisible}
         ></OpenFret>
         {frets}
     </div>
