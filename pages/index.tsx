@@ -340,7 +340,6 @@ const createStrings = () => {
 }
 
 const tuneStrings = (tuning:availableTunings, strings:guitarString[]) => {
-  let stateStrings:guitarString[] = [];
   strings.forEach((string,stringNum)=>{
     const stringTune = tunings[tuning][stringNum];
     string.openNote = stringTune.note;
@@ -366,37 +365,7 @@ const tuneStrings = (tuning:availableTunings, strings:guitarString[]) => {
     });
 
   })
-  for(let stringNum = 0; stringNum < 6; stringNum++) {
-      let gs:guitarString = {
-          openNote: tunings[tuning][stringNum].note,
-          openOctave: tunings[tuning][stringNum].octave,
-          openVisible: false,
-          frets: [],
-          stringKey: "string-" + stringNum.toString()
-      }
-      let notePosition = notes.indexOf(gs.openNote) + 1;
-      let fretOctave = gs.openOctave;
-      for(let fretNum = 0; fretNum < 13; fretNum++) {
-          if(notePosition >= notes.length) {
-              notePosition = 0;
-          }
-          const fretNote = notes[notePosition];
-          if(fretNote == "C") {
-              fretOctave++;
-          }
-
-          gs.frets.push({
-              note: fretNote,
-              octave: fretOctave,
-              visible: false,
-              fretKey: "fret-" + stringNum.toString() + "-" + fretNum.toString()
-          });
-
-          notePosition++;
-      }
-      stateStrings.push(gs);
-  }
-  return stateStrings;
+  
 }
 
 const Home: NextPage = () => {
