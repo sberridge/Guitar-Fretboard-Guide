@@ -341,7 +341,6 @@ const createStrings = () => {
 
 const tuneStrings = (tuning:availableTunings, strings:guitarString[]) => {
   let stateStrings:guitarString[] = [];
-  console.log(tuning);
   strings.forEach((string,stringNum)=>{
     const stringTune = tunings[tuning][stringNum];
     string.openNote = stringTune.note;
