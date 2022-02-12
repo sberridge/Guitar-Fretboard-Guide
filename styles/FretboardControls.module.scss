@@ -1,6 +1,26 @@
 .fretboard-controls {
     display: flex;
+    h3 {
+        margin: 0;
+    }
     &__control {
         padding: 10px;
+    }
+    
+}
+
+.scale-control {
+    h4 {
+        margin: 0;
+    }
+    &__controls {
+        display: flex;
+        
+    }
+    &__control {
+        padding-left: 10px;
+        &:first-child {
+            padding: 0;
+        }
     }
 }

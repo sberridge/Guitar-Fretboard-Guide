@@ -1,3 +1,4 @@
+
 html,
 body {
   padding: 0;
@@ -80,6 +81,9 @@ a {
 }
 .note.show {
   display: block;
+}
+.note.playing {
+  box-shadow: 0 0 6px #fff;
 }
 .note-scale-num {
   position: absolute;

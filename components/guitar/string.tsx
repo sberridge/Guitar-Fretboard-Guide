@@ -1,12 +1,13 @@
+import AudioPlayer from "../../lib/AudioPlayer";
 import Fret from "./fret";
 import OpenFret from "./openFret";
 
-function renderFret(fret:fret, noteFunc:playNoteFunc) {
+function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
     return <Fret
         note={fret.note}
         octave={fret.octave}
         visible={fret.visible}
-        onPlayNote={noteFunc}
+        audioPlayer={audioPlayer}
         fretKey={fret.fretKey}
         key={fret.fretKey}
     ></Fret>
@@ -28,13 +29,13 @@ type guitarString = {
 
 type guitarStringProps = {
     guitarString:guitarString
-    onPlayNote: playNoteFunc
+    audioPlayer: AudioPlayer | null
 }
 
 export default function GuitarString(props:guitarStringProps) {
     let frets:JSX.Element[] = [];
     for(let i = 0; i < 13; i++) {
-        frets.push(renderFret(props.guitarString.frets[i], props.onPlayNote));
+        frets.push(renderFret(props.guitarString.frets[i], props.audioPlayer));
     }
     const stringKey = props.guitarString.stringKey;
     const stringNum = parseInt(stringKey.split('-')[1]);
@@ -45,7 +46,7 @@ export default function GuitarString(props:guitarStringProps) {
             octave={props.guitarString.openOctave}
             visible={props.guitarString.openVisible}
             stringNum={stringNum}
-            onPlayNote={props.onPlayNote}
+            audioPlayer={props.audioPlayer}
         ></OpenFret>
         {frets}
     </div>

@@ -4,8 +4,8 @@ import Fretboard from '../components/guitar/fretboard'
 import FretboardControls from '../components/guitar/fretboardControls'
 import Layout from '../components/layout'
 import AudioPlayer from '../lib/AudioPlayer'
-import frequencies from '../lib/frequencies'
 import { tunings, availableTunings } from '../lib/tunings'
+import notes from '../lib/notes'
 
 type fret = {
   note: string
@@ -21,20 +21,7 @@ type guitarString = {
   frets: fret[]
 }
 
-const notes = [
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B"
-];
+
 
 
 const createStrings = (): guitarString[] => {
@@ -105,18 +92,29 @@ const tuneStrings = (tuning:availableTunings, strings:guitarString[]) => {
   
 }
 
+type state = {
+  tuning: string,
+  scaleNotes: string[],
+  scale: string,
+  scaleRoot: string,
+  guitarStrings: guitarString[]
+}
+
 const Home: NextPage = () => {
-  let audioPlayer:AudioPlayer;
+  let audioPlayer:AudioPlayer | null = null;
   if(typeof window !== "undefined") {
     audioPlayer = new AudioPlayer();
   }
   
   const guitarStrings = createStrings();
-  
-  const [state,setState] = useState({
+  let initialState:state = {
     tuning: "standard",
+    scaleNotes: [],
+    scale: "",
+    scaleRoot: "",
     guitarStrings: guitarStrings
-  });
+  };
+  const [state,setState] = useState(initialState);
   const tuningHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
     let strings = state.guitarStrings.slice();
     const tuning = e.target.value;
@@ -131,7 +129,10 @@ const Home: NextPage = () => {
     }
     setState({
       tuning: tuning,
-      guitarStrings: strings
+      guitarStrings: strings,
+      scaleNotes: state.scaleNotes,
+      scale: state.scale,
+      scaleRoot: state.scaleRoot
     });
   }
   const showNotesHandler = (e:ChangeEvent<HTMLInputElement>)=>{
@@ -152,36 +153,98 @@ const Home: NextPage = () => {
       });
     }
     setState({
+      tuning: state.tuning,
       guitarStrings: strings,
-      tuning: state.tuning
+      scaleNotes: state.scaleNotes,
+      scale: state.scale,
+      scaleRoot: state.scaleRoot
     });
   }
-  const playNote = (stringNum:number, fretNum:number) =>{
-    const string = state.guitarStrings[stringNum];
-    let note: string;
-    let octave: number;
-    if(fretNum == -1) {
-      note = string.openNote;
-      octave = string.openOctave;
-    } else {
-      note = string.frets[fretNum].note;
-      octave = string.frets[fretNum].octave;
+
+  
+
+  const setScaleNotes = (scaleRoot: string, scale: string)=>{
+    if(scale == "" || scaleRoot == "") {
+      setState({
+        tuning: state.tuning,
+        guitarStrings: state.guitarStrings,
+        scale: scale,
+        scaleRoot: scaleRoot,
+        scaleNotes: []
+      });
+      return;
     }
-    const noteFrequencies = frequencies.get(note);
-    if(noteFrequencies) {
-      audioPlayer.play(noteFrequencies[octave]);
-    }
+    let allNotes = [...notes,...notes];
+    let scaleNotes = [scaleRoot];
+    let scaleInts = scale.split("").map(i=>parseInt(i));
+    let startIndex = notes.indexOf(scaleRoot);
+    scaleInts.forEach(int=>{
+      startIndex += int;
+      scaleNotes.push(allNotes[startIndex]);
+    });
+    let strings = state.guitarStrings.slice();
+    strings.forEach(string=>{
+      if(scaleNotes.includes(string.openNote)) {
+        string.openVisible = true;
+      } else {
+        string.openVisible = false;
+      }
+      string.frets.forEach(fret=>{
+        if(scaleNotes.includes(fret.note)) {
+          fret.visible = true;
+        } else {
+          fret.visible = false;
+        }
+      })
+    })
+    setState({
+      tuning: state.tuning,
+      guitarStrings: strings,
+      scale: scale,
+      scaleRoot: scaleRoot,
+      scaleNotes: scaleNotes
+    });
   }
+
+  const scaleRootHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
+    let scaleRoot = e.target.value;
+    setState({
+      tuning: state.tuning,
+      guitarStrings: state.guitarStrings,
+      scale: state.scale,
+      scaleRoot: scaleRoot,
+      scaleNotes: []
+    });
+    if(scaleRoot !== "" && state.scale !== "") {
+      setScaleNotes(scaleRoot, state.scale);
+    }
+  };
+  
+  const scaleHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
+    let scale = e.target.value;
+    setState({
+      tuning: state.tuning,
+      guitarStrings: state.guitarStrings,
+      scale: scale,
+      scaleRoot: state.scaleRoot,
+      scaleNotes: []
+    });
+    if(scale !== "" && state.scaleRoot !== "") {
+      setScaleNotes(state.scaleRoot, scale);
+    }    
+  };
   
   return (
     <Layout>
       <FretboardControls
         onTuningChange={tuningHandler}
         onShowNotesChange={showNotesHandler}
+        onScaleRootChange={scaleRootHandler}
+        onScaleChange={scaleHandler}
       ></FretboardControls>
       <Fretboard
         guitarStrings={state.guitarStrings}
-        onPlayNote={(stringNum:number,fretNum:number)=>playNote(stringNum,fretNum)}
+        audioPlayer={audioPlayer}
       ></Fretboard>
     </Layout>
   )
