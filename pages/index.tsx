@@ -6,6 +6,11 @@ import Layout from '../components/layout'
 import AudioPlayer from '../lib/AudioPlayer'
 import { tunings, availableTunings } from '../lib/tunings'
 import notes from '../lib/notes'
+import * as f from '../lib/frequencies.json'
+type frequencyList = {
+  [key:string]:number[]
+}
+const frequencies:frequencyList = f;
 
 type fret = {
   note: string
@@ -142,7 +147,19 @@ const Home: NextPage = () => {
     setState(newState);
   }
 
-  
+  const playScale = (scale:number[]) => {
+    let note = scale.shift();
+    if(note) {
+      audioPlayer?.play(note);
+    }
+    if(scale.length > 0) {
+      setTimeout(()=>{
+        playScale(scale);
+      },500);
+    }
+    
+
+  }
 
   const setScaleNotes = (scaleRoot: string, scale: string)=>{
     if(scale == "" || scaleRoot == "") {
@@ -177,6 +194,33 @@ const Home: NextPage = () => {
     };
 
     newState.guitarStrings = createStrings(newState);
+
+    let string = newState.guitarStrings[5];
+    let octave:number = 0;
+    if(string.openNote == scaleNotes[0]) {
+      octave = string.openOctave;
+    } else {
+      string.frets.forEach(fret=>{
+        if(fret.note == scaleNotes[0]) {
+          octave = fret.octave;
+          return;
+        }
+      })
+    }
+    if(scaleNotes[0] in frequencies) {
+      scaleNotes = [...scaleNotes.slice(0,scaleNotes.length-1),...scaleNotes];
+      let previousPosition = notes.indexOf(scaleNotes[0]);
+      let scaleFrequencies = scaleNotes.map((note,i)=>{
+        let thisPosition = notes.indexOf(note);
+        if((scaleNotes[0] == "C" && i > 0 && note == "C") || previousPosition > thisPosition) {
+          octave++;
+        }
+        previousPosition = thisPosition;
+        return frequencies[note][octave];
+      })
+      playScale(scaleFrequencies);
+    }
+
     setState(newState);
   }
 
