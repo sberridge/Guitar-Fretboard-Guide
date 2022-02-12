@@ -1,6 +1,10 @@
 import { useState } from "react";
 import AudioPlayer from "../../lib/AudioPlayer";
-import frequencies from '../../lib/frequencies'
+import * as f from '../../lib/frequencies.json'
+type frequencyList = {
+    [key:string]:number[]
+}
+const frequencies:frequencyList = f;
 
 type openFretProps = {
     note: string
@@ -22,7 +26,7 @@ export default function OpenFret(props:openFretProps) {
         let note: string = props.note;
         let octave: number = props.octave;
 
-        const noteFrequencies = frequencies.get(note);
+        const noteFrequencies = frequencies[note];
         if(audioPlayer && noteFrequencies) {          
             setState({
                 playing: true
