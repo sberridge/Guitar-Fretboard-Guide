@@ -7,6 +7,7 @@ type fretProps = {
     visible: boolean
     octave: number
     fretKey: string
+    scaleNum: string | null
     audioPlayer: AudioPlayer | null
 }
 export default function Fret(props:fretProps) {
@@ -50,7 +51,7 @@ export default function Fret(props:fretProps) {
         <div className="fret-string"></div>
         <div onClick={()=>{playNote()}} className={noteClasses.join(" ")}>
             <span>{props.note}</span>
-            <div className="note-scale-num"></div>
+            <div className="note-scale-num">{props.scaleNum}</div>
         </div>
     </div>
 }

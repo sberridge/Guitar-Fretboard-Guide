@@ -6,6 +6,7 @@ type openFretProps = {
     note: string
     octave: number
     visible: boolean
+    scaleNum: string | null
     stringNum: number
     audioPlayer: AudioPlayer | null
 }
@@ -48,7 +49,7 @@ export default function OpenFret(props:openFretProps) {
         <div className="head"></div>
         <div onClick={()=>{playNote()}} className={noteClasses.join(" ")}>
             <span>{props.note}</span>
-            <div className="note-scale-num"></div>
+            <div className="note-scale-num">{props.scaleNum}</div>
         </div>
     </div>
 }

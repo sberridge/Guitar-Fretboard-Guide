@@ -12,11 +12,13 @@ type fret = {
   octave: number
   visible: boolean
   fretKey: string
+  scaleNum: string | null
 }
 type guitarString = {
   openNote: string
   openOctave: number
   openVisible: boolean
+  openScaleNum: string | null
   stringKey: string
   frets: fret[]
 }
@@ -32,6 +34,7 @@ const createStrings = (): guitarString[] => {
       let gs:guitarString = {
           openNote: standardTuning[stringNum].note,
           openOctave: standardTuning[stringNum].octave,
+          openScaleNum: null,
           openVisible: false,
           frets: [],
           stringKey: "string-" + stringNum.toString()
@@ -51,6 +54,7 @@ const createStrings = (): guitarString[] => {
               note: fretNote,
               octave: fretOctave,
               visible: false,
+              scaleNum: null,
               fretKey: "fret-" + stringNum.toString() + "-" + fretNum.toString()
           });
 
@@ -184,15 +188,22 @@ const Home: NextPage = () => {
     });
     let strings = state.guitarStrings.slice();
     strings.forEach(string=>{
+      
       if(scaleNotes.includes(string.openNote)) {
+        let openNum = scaleNotes.indexOf(string.openNote)
+        string.openScaleNum = openNum == 0 ? "T" : (openNum+1).toString()
         string.openVisible = true;
       } else {
+        string.openScaleNum = null;
         string.openVisible = false;
       }
       string.frets.forEach(fret=>{
         if(scaleNotes.includes(fret.note)) {
+          let scaleNum = scaleNotes.indexOf(fret.note);
+          fret.scaleNum = scaleNum == 0 ? "T" : (scaleNum+1).toString();
           fret.visible = true;
         } else {
+          fret.scaleNum = null;
           fret.visible = false;
         }
       })
@@ -215,7 +226,7 @@ const Home: NextPage = () => {
       scaleRoot: scaleRoot,
       scaleNotes: []
     });
-    if(scaleRoot !== "" && state.scale !== "") {
+    if((scaleRoot !== "" || state.scaleRoot !== "") && state.scale !== "") {
       setScaleNotes(scaleRoot, state.scale);
     }
   };
@@ -229,7 +240,8 @@ const Home: NextPage = () => {
       scaleRoot: state.scaleRoot,
       scaleNotes: []
     });
-    if(scale !== "" && state.scaleRoot !== "") {
+    if((scale !== "" || state.scale !== "") && state.scaleRoot !== "") {
+      console.log('tes');
       setScaleNotes(state.scaleRoot, scale);
     }    
   };

@@ -14,11 +14,13 @@ type fret = {
     octave: number
     visible: boolean
     fretKey: string
+    scaleNum: string | null
   }
   type guitarString = {
     openNote: string
     openOctave: number
     openVisible: boolean
+    openScaleNum: string | null
     stringKey: string
     frets: fret[]
   }

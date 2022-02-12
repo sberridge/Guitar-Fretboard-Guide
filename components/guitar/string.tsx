@@ -8,6 +8,7 @@ function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
         octave={fret.octave}
         visible={fret.visible}
         audioPlayer={audioPlayer}
+        scaleNum={fret.scaleNum}
         fretKey={fret.fretKey}
         key={fret.fretKey}
     ></Fret>
@@ -18,6 +19,7 @@ type fret = {
     octave: number
     fretKey: string
     visible: boolean
+    scaleNum: string | null
 }
 type guitarString = {
     openNote: string
@@ -25,6 +27,7 @@ type guitarString = {
     openVisible: boolean
     stringKey: string
     frets: fret[]
+    openScaleNum: string | null
 }
 
 type guitarStringProps = {
@@ -45,6 +48,7 @@ export default function GuitarString(props:guitarStringProps) {
             note={props.guitarString.openNote}
             octave={props.guitarString.openOctave}
             visible={props.guitarString.openVisible}
+            scaleNum={props.guitarString.openScaleNum}
             stringNum={stringNum}
             audioPlayer={props.audioPlayer}
         ></OpenFret>
