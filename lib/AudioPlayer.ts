@@ -1,4 +1,8 @@
-
+import * as w from './guitar_wave.json';
+type waveTables = {
+    [key:string]:number[]
+}
+const waveTable:waveTables = w;
 export default class AudioPlayer {
     private audioCtx = new AudioContext();
     constructor() {
@@ -9,8 +13,9 @@ export default class AudioPlayer {
         
         
         const ocilator = this.audioCtx.createOscillator();
+        const wave = this.audioCtx.createPeriodicWave(waveTable.real, waveTable.imag);
         ocilator.frequency.value = frequency;
-        ocilator.type = "square";
+        ocilator.setPeriodicWave(wave);
         const gain = this.audioCtx.createGain();
         ocilator.connect(gain);
         gain.connect(this.audioCtx.destination);
