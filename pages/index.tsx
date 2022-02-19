@@ -80,32 +80,56 @@ const createStrings = (state:state): guitarString[] => {
   return stateStrings;
 }
 
+type audioDevice = {
+  label: string
+  id: string
+}
+
 type state = {
   tuning: availableTunings,
   scaleNotes: string[],
   scale: string,
   scaleRoot: string,
   guitarStrings: guitarString[]
-  showAllNotes: boolean
+  showAllNotes: boolean,
+  audioDevices: audioDevice[],
+  selectedAudioDeviceId: string | undefined
+}
+
+let audioPlayer:AudioPlayer | null = null;
+if(typeof window !== "undefined") {
+  audioPlayer = new AudioPlayer();
 }
 
 const Home: NextPage = () => {
-  let audioPlayer:AudioPlayer | null = null;
-  if(typeof window !== "undefined") {
-    audioPlayer = new AudioPlayer();
-  }
+  
+  
   let initialState:state = {
     tuning: "standard",
     scaleNotes: [],
     scale: "",
     scaleRoot: "",
     guitarStrings: [],
-    showAllNotes: false
+    showAllNotes: false,
+    audioDevices: [],
+    selectedAudioDeviceId: undefined
   };
   const guitarStrings = createStrings(initialState);
   initialState.guitarStrings = guitarStrings
   const [state,setState] = useState(initialState);
 
+  const getState = ():state=>{
+    return {
+      tuning: state.tuning,
+      guitarStrings: state.guitarStrings,
+      scaleNotes: state.scaleNotes,
+      scale: state.scale,
+      scaleRoot: state.scaleRoot,
+      showAllNotes: state.showAllNotes,
+      audioDevices: state.audioDevices,
+      selectedAudioDeviceId: state.selectedAudioDeviceId
+    };
+  }
   const tuningHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
     let tuning:availableTunings | undefined = undefined;
     switch(e.target.value) {
@@ -118,30 +142,16 @@ const Home: NextPage = () => {
         break;
     }
     if(typeof tuning !== "undefined") {
-      let newState:state = {
-        tuning: tuning,
-        guitarStrings: [],
-        scaleNotes: state.scaleNotes,
-        scale: state.scale,
-        scaleRoot: state.scaleRoot,
-        showAllNotes: state.showAllNotes
-      };
-
-      newState.guitarStrings = createStrings(newState)
-
+      let newState = getState();
+      newState.tuning = tuning;
+      newState.guitarStrings = createStrings(newState);
       setState(newState);
     }
     
   }
   const showNotesHandler = (e:ChangeEvent<HTMLInputElement>)=>{
-    let newState: state = {
-      tuning: state.tuning,
-      guitarStrings: [],
-      scaleNotes: state.scaleNotes,
-      scale: state.scale,
-      scaleRoot: state.scaleRoot,
-      showAllNotes: e.target.checked
-    };
+    let newState = getState();
+    newState.showAllNotes = e.target.checked;
     newState.guitarStrings = createStrings(newState);
 
     setState(newState);
@@ -163,14 +173,10 @@ const Home: NextPage = () => {
 
   const setScaleNotes = (scaleRoot: string, scale: string)=>{
     if(scale == "" || scaleRoot == "") {
-      let newState: state = {
-        tuning: state.tuning,
-        guitarStrings: [],
-        scale: scale,
-        scaleRoot: scaleRoot,
-        scaleNotes: [],
-        showAllNotes: state.showAllNotes
-      };
+      let newState = getState();
+      newState.scale = scale;
+      newState.scaleRoot = scaleRoot;
+      newState.scaleNotes = [];
       newState.guitarStrings = createStrings(newState);
       setState(newState);
       return;
@@ -183,15 +189,10 @@ const Home: NextPage = () => {
       startIndex += int;
       scaleNotes.push(allNotes[startIndex]);
     });
-
-    let newState:state = {
-      tuning: state.tuning,
-      guitarStrings: [],
-      scale: scale,
-      scaleRoot: scaleRoot,
-      scaleNotes: scaleNotes,
-      showAllNotes: state.showAllNotes
-    };
+    let newState = getState();
+    newState.scale = scale;
+    newState.scaleRoot = scaleRoot;
+    newState.scaleNotes = scaleNotes;
 
     newState.guitarStrings = createStrings(newState);
 
@@ -226,14 +227,10 @@ const Home: NextPage = () => {
 
   const scaleRootHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
     let scaleRoot = e.target.value;
-    setState({
-      tuning: state.tuning,
-      guitarStrings: state.guitarStrings,
-      scale: state.scale,
-      scaleRoot: scaleRoot,
-      scaleNotes: [],
-      showAllNotes: state.showAllNotes
-    });
+    let newState = getState();
+    newState.scaleRoot = scaleRoot;
+    newState.scaleNotes = [];
+    setState(newState);
     if((scaleRoot !== "" || state.scaleRoot !== "") && state.scale !== "") {
       setScaleNotes(scaleRoot, state.scale);
     }
@@ -241,18 +238,89 @@ const Home: NextPage = () => {
   
   const scaleHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
     let scale = e.target.value;
-    setState({
-      tuning: state.tuning,
-      guitarStrings: state.guitarStrings,
-      scale: scale,
-      scaleRoot: state.scaleRoot,
-      scaleNotes: [],
-      showAllNotes: state.showAllNotes
-    });
+    let newState = getState();
+    newState.scale = scale;
+    newState.scaleNotes = [];
+    setState(newState);
     if((scale !== "" || state.scale !== "") && state.scaleRoot !== "") {
       setScaleNotes(state.scaleRoot, scale);
     }    
   };
+  const getStream = async (id?:string): Promise<void | MediaStream> => {
+    let constraints:MediaStreamConstraints = {
+      audio: true
+    }
+    if(id) {
+      constraints.audio = {
+        deviceId: id
+      };
+    }
+    const stream = await navigator.mediaDevices.getUserMedia(constraints).catch(err=>{
+      console.log(err);
+    });
+    return stream;
+    /* if(stream) {
+      let newState = getState();
+      newState.selectedAudioDeviceId = stream.getAudioTracks()[0].id;
+      console.log(newState);
+      setState(newState);
+      console.log(stream.getAudioTracks());
+    } */
+  }
+  
+  const getDevices = async (): Promise<audioDevice[] | null> => {
+    const devices = await navigator.mediaDevices.enumerateDevices()
+      .catch(err=>{
+        console.log(err);
+      });
+    if(!devices) return null;
+    let deviceList:audioDevice[] = [];
+    devices.forEach(device=>{
+      if(device.kind != "audioinput") {
+        return;
+      }
+      deviceList.push({
+        "label": device.label,
+        "id": device.deviceId
+      });
+    });
+    return deviceList
+    
+  }
+  const initiateLivePlaying = async () => {
+    let newState = getState();
+    
+    const stream = await getStream();
+    if(stream) {
+      newState.selectedAudioDeviceId = stream.getAudioTracks()[0].getSettings().deviceId;
+      audioPlayer?.playStream(stream);
+    }
+    const deviceList = await getDevices();
+    if(deviceList) {
+      newState.audioDevices = deviceList;
+    }
+    setState(newState);
+  }
+
+  const audioDeviceChange = (deviceId:string) => {
+    getStream(deviceId).then(stream=>{
+      if(stream) {
+        let newState = getState();
+        console.log(stream.getAudioTracks()[0]);
+        newState.selectedAudioDeviceId = stream.getAudioTracks()[0].getSettings().deviceId;
+        setState(newState);
+        audioPlayer?.playStream(stream);
+      }
+      
+    });
+  }
+
+  const renderInputOpts = () => {
+    return state.audioDevices.map((device)=>{
+      return <option key={device.id} value={device.id}>{device.label}</option>
+    })
+  }
+
   
   return (
     <Layout>
@@ -266,6 +334,16 @@ const Home: NextPage = () => {
         guitarStrings={state.guitarStrings}
         audioPlayer={audioPlayer}
       ></Fretboard>
+      {state.audioDevices.length == 0 && 
+        <button onClick={initiateLivePlaying}>Live</button>
+      }
+      {state.audioDevices.length > 0 &&        
+        <select onChange={(e)=>{audioDeviceChange(e.target.value)}} value={state.selectedAudioDeviceId}>
+          {renderInputOpts()}
+        </select>
+      }
+
+      
     </Layout>
   )
 }
