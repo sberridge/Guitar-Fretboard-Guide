@@ -259,13 +259,6 @@ const Home: NextPage = () => {
       console.log(err);
     });
     return stream;
-    /* if(stream) {
-      let newState = getState();
-      newState.selectedAudioDeviceId = stream.getAudioTracks()[0].id;
-      console.log(newState);
-      setState(newState);
-      console.log(stream.getAudioTracks());
-    } */
   }
   
   const getDevices = async (): Promise<audioDevice[] | null> => {
@@ -306,7 +299,6 @@ const Home: NextPage = () => {
     getStream(deviceId).then(stream=>{
       if(stream) {
         let newState = getState();
-        console.log(stream.getAudioTracks()[0]);
         newState.selectedAudioDeviceId = stream.getAudioTracks()[0].getSettings().deviceId;
         setState(newState);
         audioPlayer?.playStream(stream);
