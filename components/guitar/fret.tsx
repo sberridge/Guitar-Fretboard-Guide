@@ -51,11 +51,11 @@ export default function Fret(props:fretProps) {
         noteClasses.push("show");
     }
 
-    return <div className="fret">
-        <div className="fret-string"></div>
+    return <div className="fretboard__fret">
+        <div className="fretboard__fret-string"></div>
         <div onClick={()=>{playNote()}} className={noteClasses.join(" ")}>
             <span>{props.note}</span>
-            <div className="note-scale-num">{props.scaleNum}</div>
+            <div className="note__scale-num">{props.scaleNum}</div>
         </div>
     </div>
 }

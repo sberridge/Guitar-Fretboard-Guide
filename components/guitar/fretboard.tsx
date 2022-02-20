@@ -37,7 +37,7 @@ export default function Fretboard(props:fretBoardProps) {
         renderedStrings.push(renderString(props.guitarStrings[i],props.audioPlayer));
     }
 
-    return <div id="fretboard">
+    return <div id="fretboard" className="fretboard">
         {renderedStrings}
     </div>
 }

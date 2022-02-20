@@ -43,7 +43,7 @@ export default function GuitarString(props:guitarStringProps) {
     const stringKey = props.guitarString.stringKey;
     const stringNum = parseInt(stringKey.split('-')[1]);
 
-    return <div className="string">
+    return <div className="fretboard__string">
         <OpenFret
             note={props.guitarString.openNote}
             octave={props.guitarString.openOctave}

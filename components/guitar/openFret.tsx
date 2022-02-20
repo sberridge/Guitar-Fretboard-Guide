@@ -49,8 +49,8 @@ export default function OpenFret(props:openFretProps) {
     if(props.visible) {
         noteClasses.push("show");
     }
-    return <div className="open">
-        <div className="head"></div>
+    return <div className="fretboard__head">
+        <div className="fretboard__tuning-machine"></div>
         <div onClick={()=>{playNote()}} className={noteClasses.join(" ")}>
             <span>{props.note}</span>
             <div className="note-scale-num">{props.scaleNum}</div>

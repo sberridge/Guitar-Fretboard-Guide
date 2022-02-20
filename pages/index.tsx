@@ -7,6 +7,7 @@ import AudioPlayer from '../lib/AudioPlayer'
 import { tunings, availableTunings } from '../lib/tunings'
 import notes from '../lib/notes'
 import * as f from '../lib/frequencies.json'
+import ScaleDisplay from '../components/guitar/scaleDisplay'
 type frequencyList = {
   [key:string]:number[]
 }
@@ -88,6 +89,7 @@ type audioDevice = {
 type state = {
   tuning: availableTunings,
   scaleNotes: string[],
+  scaleFrequencies: number[],
   scale: string,
   scaleRoot: string,
   guitarStrings: guitarString[]
@@ -107,6 +109,7 @@ const Home: NextPage = () => {
   let initialState:state = {
     tuning: "standard",
     scaleNotes: [],
+    scaleFrequencies: [],
     scale: "",
     scaleRoot: "",
     guitarStrings: [],
@@ -123,6 +126,7 @@ const Home: NextPage = () => {
       tuning: state.tuning,
       guitarStrings: state.guitarStrings,
       scaleNotes: state.scaleNotes,
+      scaleFrequencies: state.scaleFrequencies,
       scale: state.scale,
       scaleRoot: state.scaleRoot,
       showAllNotes: state.showAllNotes,
@@ -208,10 +212,11 @@ const Home: NextPage = () => {
         }
       })
     }
+    let scaleFrequencies:number[] = [];
     if(scaleNotes[0] in frequencies) {
       scaleNotes = [...scaleNotes.slice(0,scaleNotes.length-1),...scaleNotes];
       let previousPosition = notes.indexOf(scaleNotes[0]);
-      let scaleFrequencies = scaleNotes.map((note,i)=>{
+      scaleFrequencies = scaleNotes.map((note,i)=>{
         let thisPosition = notes.indexOf(note);
         if((scaleNotes[0] == "C" && i > 0 && note == "C") || previousPosition > thisPosition) {
           octave++;
@@ -219,9 +224,9 @@ const Home: NextPage = () => {
         previousPosition = thisPosition;
         return frequencies[note][octave];
       })
-      playScale(scaleFrequencies);
+      playScale([...scaleFrequencies]);
     }
-
+    newState.scaleFrequencies = scaleFrequencies;
     setState(newState);
   }
 
@@ -322,6 +327,13 @@ const Home: NextPage = () => {
         onScaleRootChange={scaleRootHandler}
         onScaleChange={scaleHandler}
       ></FretboardControls>
+      {state.scaleNotes.length > 0 && 
+        <ScaleDisplay
+          scaleNotes={state.scaleNotes}
+          audioPlayer={audioPlayer}
+          scaleFrequencies={state.scaleFrequencies}
+        ></ScaleDisplay>
+      }
       <Fretboard
         guitarStrings={state.guitarStrings}
         audioPlayer={audioPlayer}
