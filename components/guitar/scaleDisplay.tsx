@@ -1,3 +1,4 @@
+import { MouseEventHandler } from "react";
 import AudioPlayer from "../../lib/AudioPlayer"
 import Note from "./note";
 
@@ -5,6 +6,7 @@ type scaleDisplayProps = {
     scaleNotes: string[]
     scaleFrequencies: number[]
     audioPlayer: AudioPlayer | null
+    onPlayScale: MouseEventHandler<HTMLButtonElement>
 }
 export default function ScaleDisplay(props:scaleDisplayProps) {
     const renderScaleNotes = ()=>{
@@ -20,6 +22,9 @@ export default function ScaleDisplay(props:scaleDisplayProps) {
         })
     }
     return <div className='scale-display'>
-        {renderScaleNotes()}
+        <div className="scale-display__notes">
+            {renderScaleNotes()}    
+        </div>
+        <button onClick={props.onPlayScale}>Play</button>
     </div>
 }

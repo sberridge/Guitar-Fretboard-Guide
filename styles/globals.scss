@@ -104,8 +104,15 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   padding: 10px 5px;
   background: #553434;
+  .scale-display__notes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
   .note {
     margin: 0 5px;
   }

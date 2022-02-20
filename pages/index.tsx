@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, MouseEvent, useState } from 'react'
 import Fretboard from '../components/guitar/fretboard'
 import FretboardControls from '../components/guitar/fretboardControls'
 import Layout from '../components/layout'
@@ -318,6 +318,10 @@ const Home: NextPage = () => {
     })
   }
 
+  const playScaleHandler = (e:MouseEvent<HTMLButtonElement>)=>{
+    playScale([...state.scaleFrequencies]);
+  }
+
   
   return (
     <Layout>
@@ -332,6 +336,7 @@ const Home: NextPage = () => {
           scaleNotes={state.scaleNotes}
           audioPlayer={audioPlayer}
           scaleFrequencies={state.scaleFrequencies}
+          onPlayScale={playScaleHandler}
         ></ScaleDisplay>
       }
       <Fretboard
