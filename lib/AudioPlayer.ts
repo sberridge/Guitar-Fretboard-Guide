@@ -46,11 +46,6 @@ export default class AudioPlayer {
         this.audio.srcObject = stream;
         
         let source = audioCtx.createMediaStreamSource(stream);
-        var biquadFilter = audioCtx.createBiquadFilter();
-        biquadFilter.type = "lowshelf";
-        biquadFilter.frequency.value = 2000;
-        biquadFilter.gain.value = 60;
-        source.connect(biquadFilter);
-        biquadFilter.connect(audioCtx.destination);
+        source.connect(audioCtx.destination);
     }
 }
