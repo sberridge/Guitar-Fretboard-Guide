@@ -13,7 +13,6 @@ function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
         key={fret.fretKey}
     ></Fret>
 }
-type playNoteFunc = (stringNum:number, fretNum:number)=>void
 type fret = {
     note: string
     octave: number

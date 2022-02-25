@@ -1,4 +1,3 @@
-import { useState } from "react";
 import AudioPlayer from "../../lib/AudioPlayer";
 import GuitarString from "./string"
 function renderString(stringDetails:guitarString,audioPlayer: AudioPlayer | null) {

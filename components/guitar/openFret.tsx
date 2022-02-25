@@ -1,11 +1,5 @@
-import { useState } from "react";
 import AudioPlayer from "../../lib/AudioPlayer";
-import * as f from '../../lib/frequencies.json'
 import Note from "./note";
-type frequencyList = {
-    [key:string]:number[]
-}
-const frequencies:frequencyList = f;
 
 type openFretProps = {
     note: string
