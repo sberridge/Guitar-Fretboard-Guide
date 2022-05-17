@@ -1,6 +1,6 @@
 # Next.js Guitar Tutor
 
-Guitar fretboard guide built as a learning project for React / Next.js.
+Guitar fretboard guide built as a learning project for React.
 
 Run with "npm run dev".
 

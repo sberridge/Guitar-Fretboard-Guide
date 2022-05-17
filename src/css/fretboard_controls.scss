@@ -1,0 +1,26 @@
+.fretboard-controls {
+    display: flex;
+    flex-wrap: wrap;
+    h3 {
+        margin: 0;
+    }
+    &__control {
+        padding: 10px;
+    }
+    @media(min-width: 370px) {
+        flex-wrap: nowrap;
+    }
+    
+}
+
+.scale-control {
+    h4 {
+        margin: 0;
+    }
+    &__controls {
+        display: flex;
+        column-gap: 10px;   
+        row-gap: 10px;
+        flex-wrap: wrap;
+    }
+}
