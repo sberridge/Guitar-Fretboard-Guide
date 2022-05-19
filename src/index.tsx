@@ -15,12 +15,12 @@ if(typeof window !== "undefined") {
   audioPlayer = new AudioPlayer();
 }
 
-const App = (props:AppProps) => {
+const App = ({title}: AppProps) => {
     
     return (
         <div>
             <Header
-                title={props.title}
+                title={title}
             ></Header>
             <LivePlayer
                 audioPlayer={audioPlayer}

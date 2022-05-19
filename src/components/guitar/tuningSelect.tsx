@@ -5,10 +5,10 @@ type tuningSelectProps = {
     onChange: ChangeEventHandler<HTMLSelectElement>
 }
 
-export default function TuningSelect(props:tuningSelectProps) {
+export default function TuningSelect({onChange}:tuningSelectProps) {
     return <div>
         <h3>Tuning</h3>
-        <select onChange={props.onChange}>
+        <select onChange={onChange}>
             <option value="standard">Standard</option>
             <option value="dropd">Drop D</option>
             <option value="ddropd">Double Drop D</option>

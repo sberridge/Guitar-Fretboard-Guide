@@ -30,10 +30,10 @@ type fretBoardProps = {
     audioPlayer:AudioPlayer | null
 }
 
-export default function Fretboard(props:fretBoardProps) {
+export default function Fretboard({guitarStrings, audioPlayer}:fretBoardProps) {
     let renderedStrings:JSX.Element[] = [];
     for(let i = 0; i < 6; i++) {
-        renderedStrings.push(renderString(props.guitarStrings[i],props.audioPlayer));
+        renderedStrings.push(renderString(guitarStrings[i],audioPlayer));
     }
 
     return <div id="fretboard" className="fretboard">

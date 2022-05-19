@@ -35,22 +35,29 @@ type guitarStringProps = {
     audioPlayer: AudioPlayer | null
 }
 
-export default function GuitarString(props:guitarStringProps) {
+const createFrets = (guitarString:guitarString, audioPlayer:AudioPlayer|null) => {
     let frets:JSX.Element[] = [];
-    for(let i = 0; i < props.guitarString.frets.length; i++) {
-        frets.push(renderFret(props.guitarString.frets[i], props.audioPlayer));
+    for(let i = 0; i < guitarString.frets.length; i++) {
+        frets.push(renderFret(guitarString.frets[i], audioPlayer));
     }
-    const stringKey = props.guitarString.stringKey;
+    return frets;
+}
+
+export default function GuitarString({guitarString,audioPlayer}:guitarStringProps) {
+    
+    const frets = createFrets(guitarString, audioPlayer)
+
+    const stringKey = guitarString.stringKey;
     const stringNum = parseInt(stringKey.split('-')[1]);
 
     return <div className="fretboard__string">
         <OpenFret
-            note={props.guitarString.openNote}
-            octave={props.guitarString.openOctave}
-            visible={props.guitarString.openVisible}
-            scaleNum={props.guitarString.openScaleNum}
+            note={guitarString.openNote}
+            octave={guitarString.openOctave}
+            visible={guitarString.openVisible}
+            scaleNum={guitarString.openScaleNum}
             stringNum={stringNum}
-            audioPlayer={props.audioPlayer}
+            audioPlayer={audioPlayer}
         ></OpenFret>
         {frets}
     </div>

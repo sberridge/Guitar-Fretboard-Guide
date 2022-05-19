@@ -16,18 +16,14 @@ type noteProps = {
     visible: boolean
     scaleNum: string | null
 }
-export default function Note(props:noteProps) {
+export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum}:noteProps) {
 
-    const audioPlayer = props.audioPlayer;
 
     const [state,setState] = useState({
         "playing": false
     });
 
     const playNote = () =>{
-        let note: string = props.note;
-        let octave: number | undefined = props.octave;
-        let frequency: number | undefined = props.frequency;
         
         let frequencyToPlay:number|null = null
         if(octave) {
@@ -60,12 +56,12 @@ export default function Note(props:noteProps) {
     if(state.playing) {
         noteClasses.push("playing");
     }
-    if(props.visible) {
+    if(visible) {
         noteClasses.push("show");
     }
 
     return <div onClick={()=>{playNote()}} className={noteClasses.join(" ")}>
-        <span>{props.note}</span>
-        <div className="note__scale-num">{props.scaleNum}</div>
+        <span>{note}</span>
+        <div className="note__scale-num">{scaleNum}</div>
     </div>
 }

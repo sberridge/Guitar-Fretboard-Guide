@@ -11,16 +11,16 @@ type openFretProps = {
     audioPlayer: AudioPlayer | null
 }
 
-export default function OpenFret(props:openFretProps) {
+export default function OpenFret({note,audioPlayer,octave,visible,scaleNum}:openFretProps) {
 
     return <div className="fretboard__head">
         <div className="fretboard__tuning-machine"></div>
         <Note
-            note={props.note}
-            audioPlayer={props.audioPlayer}
-            octave={props.octave}
-            visible={props.visible}
-            scaleNum={props.scaleNum}
+            note={note}
+            audioPlayer={audioPlayer}
+            octave={octave}
+            visible={visible}
+            scaleNum={scaleNum}
         ></Note>
     </div>
 }

@@ -11,22 +11,22 @@ type fretboardControlProps = {
     onShowNotesChange: ChangeEventHandler<HTMLInputElement>
 }
 
-export default function FretboardControls(props:fretboardControlProps) {
+export default function FretboardControls({onTuningChange, onScaleChange, onScaleRootChange, onShowNotesChange}:fretboardControlProps) {
     return <div className="fretboard-controls">
         <div className="fretboard-controls__control">
             <TuningSelect
-                onChange={props.onTuningChange}
+                onChange={onTuningChange}
             ></TuningSelect>
         </div>
         <div className="fretboard-controls__control">
             <ShowNotesControl
-                onChange={props.onShowNotesChange}
+                onChange={onShowNotesChange}
             ></ShowNotesControl>
         </div>
         <div className="fretboard-controls__control">
             <ScaleSelect
-                onRootChange={props.onScaleRootChange}
-                onScaleChange={props.onScaleChange}
+                onRootChange={onScaleRootChange}
+                onScaleChange={onScaleChange}
             ></ScaleSelect>
         </div>
     </div>

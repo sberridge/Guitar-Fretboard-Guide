@@ -9,16 +9,16 @@ type scaleDisplayProps = {
     audioPlayer: AudioPlayer | null
     onPlayScale: MouseEventHandler<HTMLButtonElement>
 }
-export default function ScaleDisplay(props:scaleDisplayProps) {
+export default function ScaleDisplay({scaleFrequencies,scaleNotes,audioPlayer,onPlayScale}:scaleDisplayProps) {
     const renderScaleNotes = ()=>{
-        return props.scaleNotes.map((note,i)=>{
+        return scaleNotes.map((note,i)=>{
             return <Note
                         key={`scale-note-${i}`}
                         note={note}
                         scaleNum={i == 0 || i == 7 ? "T" : (i+1).toString()}
-                        frequency={props.scaleFrequencies[i]}
+                        frequency={scaleFrequencies[i]}
                         visible={true}
-                        audioPlayer={props.audioPlayer}
+                        audioPlayer={audioPlayer}
                         ></Note>
         })
     }
@@ -26,6 +26,6 @@ export default function ScaleDisplay(props:scaleDisplayProps) {
         <div className="scale-display__notes">
             {renderScaleNotes()}    
         </div>
-        <button className="play-button" onClick={props.onPlayScale}></button>
+        <button className="play-button" onClick={onPlayScale}></button>
     </div>
 }

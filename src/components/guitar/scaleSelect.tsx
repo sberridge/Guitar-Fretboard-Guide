@@ -21,20 +21,20 @@ const renderScaleOpts = ()=>{
     });
 }
 
-export default function ScaleSelect(props:scaleSelectProps) {
+export default function ScaleSelect({onScaleChange,onRootChange}:scaleSelectProps) {
     return <div className="scale-control">
         <h3>Scale</h3>
         <div className="scale-control__controls">
             <div className="scale-control__control">
                 <h4>Root</h4>
-                <select onChange={props.onRootChange}>
+                <select onChange={onRootChange}>
                     <option></option>
                     {renderNoteOpts()}
                 </select>
             </div>
             <div className="scale-control__control">
                 <h4>Scale</h4>
-                <select onChange={props.onScaleChange}>
+                <select onChange={onScaleChange}>
                     <option></option>
                     {renderScaleOpts()}
                 </select>
