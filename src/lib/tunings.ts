@@ -1,4 +1,4 @@
-import note from "./types/note";
+import note from "../components/types/note";
 
 type availableTunings = "standard" | "dropd" | "dadgad" | "ddropd" | "opend";
 const tunings:Map<availableTunings,note[]> = new Map([
