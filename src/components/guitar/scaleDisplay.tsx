@@ -1,6 +1,6 @@
 import React from "react";
 import { MouseEventHandler } from "react";
-import AudioPlayer from "../../lib/AudioPlayer"
+import AudioPlayer from "../../lib/AudioPlayer";
 import Note from "./note";
 
 type scaleDisplayProps = {
@@ -19,13 +19,13 @@ export default function ScaleDisplay({scaleFrequencies,scaleNotes,audioPlayer,on
                         frequency={scaleFrequencies[i]}
                         visible={true}
                         audioPlayer={audioPlayer}
-                        ></Note>
-        })
-    }
+                    ></Note>;
+        });
+    };
     return <div className='scale-display'>
         <div className="scale-display__notes">
             {renderScaleNotes()}    
         </div>
         <button className="play-button" onClick={onPlayScale}></button>
-    </div>
+    </div>;
 }

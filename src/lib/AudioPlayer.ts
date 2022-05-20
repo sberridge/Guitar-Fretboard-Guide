@@ -19,8 +19,7 @@ export default class AudioPlayer {
         ocilator.start(0);
         gain.gain.exponentialRampToValueAtTime(
             0.00001,this.audioCtx.currentTime + 1
-        )
-        
+        );
     }
 
     playStream(stream:MediaStream) {
@@ -28,12 +27,12 @@ export default class AudioPlayer {
         audioCtx.resume();
         if(!this.audio) {
             this.audio = document.createElement('audio');
-            this.audio.onloadedmetadata = (e) =>{
+            this.audio.onloadedmetadata = () =>{
                 if(this.audio) {
                     this.audio.play();
                     this.audio.muted = true;
                 }                
-            }
+            };
             document.body.appendChild(this.audio);
         }
         if(this.currentStream) {
@@ -42,7 +41,7 @@ export default class AudioPlayer {
         this.currentStream = stream;
         this.audio.srcObject = stream;
         
-        let source = audioCtx.createMediaStreamSource(stream);
+        const source = audioCtx.createMediaStreamSource(stream);
         source.connect(audioCtx.destination);
     }
 }

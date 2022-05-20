@@ -17,17 +17,17 @@ type livePlayerProps = {
 
 const LivePlayer = ({audioPlayer}:livePlayerProps) => {
 
-    let initialAudioState:audioState = {
+    const initialAudioState:audioState = {
         audioDevices: [],
         selectedAudioDeviceId: undefined
-      }
+    };
 
     const [audioState,setAudioState] = useState(initialAudioState);
 
     const getStream = async (id?:string): Promise<void | MediaStream> => {
-        let constraints:MediaStreamConstraints = {
+        const constraints:MediaStreamConstraints = {
             audio: true
-        }
+        };
         if(id) {
             constraints.audio = {
                 deviceId: id
@@ -37,7 +37,7 @@ const LivePlayer = ({audioPlayer}:livePlayerProps) => {
             console.log(err);
         });
         return stream;
-    }
+    };
 
     const getDevices = async (): Promise<audioDevice[] | null> => {
         const devices = await navigator.mediaDevices.enumerateDevices()
@@ -45,7 +45,7 @@ const LivePlayer = ({audioPlayer}:livePlayerProps) => {
                 console.log(err);
             });
         if(!devices) return null;
-        let deviceList:audioDevice[] = [];
+        const deviceList:audioDevice[] = [];
         devices.forEach(device=>{
             if(device.kind != "audioinput") {
                 return;
@@ -55,11 +55,11 @@ const LivePlayer = ({audioPlayer}:livePlayerProps) => {
                 "id": device.deviceId
             });
         });
-        return deviceList
+        return deviceList;
 
-    }
+    };
     const initiateLivePlaying = async () => {
-        let newState:audioState = {};
+        const newState:audioState = {};
 
         const stream = await getStream();
         if(stream) {
@@ -72,7 +72,7 @@ const LivePlayer = ({audioPlayer}:livePlayerProps) => {
         }
 
         setAudioState(newState);
-    }
+    };
 
     const audioDeviceChange = (deviceId:string) => {
         getStream(deviceId).then(stream=>{
@@ -84,16 +84,16 @@ const LivePlayer = ({audioPlayer}:livePlayerProps) => {
             }
 
         });
-    }
+    };
 
     const renderInputOpts = () => {
         if(!audioState.audioDevices) {
             return null;
         }
         return audioState.audioDevices.map((device)=>{
-            return <option key={device.id} value={device.id}>{device.label}</option>
-        })
-    }
+            return <option key={device.id} value={device.id}>{device.label}</option>;
+        });
+    };
 
     return <section className="play-live-section">
         {!audioState.audioDevices || audioState.audioDevices.length == 0 &&
@@ -102,12 +102,12 @@ const LivePlayer = ({audioPlayer}:livePlayerProps) => {
         {audioState.audioDevices && audioState.audioDevices.length > 0 &&
             <div>
                 <label htmlFor="live-audio-input-select">Select Input</label>
-                <select id="live-audio-input-select" onChange={(e)=>{audioDeviceChange(e.target.value)}} value={audioState.selectedAudioDeviceId}>
+                <select id="live-audio-input-select" onChange={(e)=>{audioDeviceChange(e.target.value);}} value={audioState.selectedAudioDeviceId}>
                     {renderInputOpts()}
                 </select>
             </div>
         }      
-    </section>
-}
+    </section>;
+};
 
 export default LivePlayer;

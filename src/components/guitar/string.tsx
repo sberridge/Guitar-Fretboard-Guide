@@ -12,7 +12,7 @@ function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
         scaleNum={fret.scaleNum}
         fretKey={fret.fretKey}
         key={fret.fretKey}
-    ></Fret>
+    ></Fret>;
 }
 type fret = {
     note: string
@@ -36,16 +36,16 @@ type guitarStringProps = {
 }
 
 const createFrets = (guitarString:guitarString, audioPlayer:AudioPlayer|null) => {
-    let frets:JSX.Element[] = [];
+    const frets:JSX.Element[] = [];
     for(let i = 0; i < guitarString.frets.length; i++) {
         frets.push(renderFret(guitarString.frets[i], audioPlayer));
     }
     return frets;
-}
+};
 
 export default function GuitarString({guitarString,audioPlayer}:guitarStringProps) {
     
-    const frets = createFrets(guitarString, audioPlayer)
+    const frets = createFrets(guitarString, audioPlayer);
 
     const stringKey = guitarString.stringKey;
     const stringNum = parseInt(stringKey.split('-')[1]);
@@ -60,5 +60,5 @@ export default function GuitarString({guitarString,audioPlayer}:guitarStringProp
             audioPlayer={audioPlayer}
         ></OpenFret>
         {frets}
-    </div>
+    </div>;
 }

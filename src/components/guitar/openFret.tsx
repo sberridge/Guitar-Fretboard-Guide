@@ -22,5 +22,5 @@ export default function OpenFret({note,audioPlayer,octave,visible,scaleNum}:open
             visible={visible}
             scaleNum={scaleNum}
         ></Note>
-    </div>
+    </div>;
 }

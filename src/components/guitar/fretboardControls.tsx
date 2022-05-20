@@ -29,5 +29,5 @@ export default function FretboardControls({onTuningChange, onScaleChange, onScal
                 onScaleChange={onScaleChange}
             ></ScaleSelect>
         </div>
-    </div>
+    </div>;
 }

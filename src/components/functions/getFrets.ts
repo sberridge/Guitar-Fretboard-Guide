@@ -1,7 +1,7 @@
 import fret from "../types/fret";
 import notes from './../../lib/notes';
 const getFrets = (stringNum:string, note:number, octave:number, scaleNotes:string[], showAllNotes:boolean):fret[] => {
-    let frets:fret[] = [];
+    const frets:fret[] = [];
     for(let fretNum = 0; fretNum < 13; fretNum++) {
         if(note >= notes.length) {
             note = 0;
@@ -13,7 +13,7 @@ const getFrets = (stringNum:string, note:number, octave:number, scaleNotes:strin
 
         let fretScaleNum: null | string = null;
         if(scaleNotes.includes(fretNote)) {
-            let fretScalePosition = scaleNotes.indexOf(fretNote);
+            const fretScalePosition = scaleNotes.indexOf(fretNote);
             fretScaleNum = fretScalePosition == 0 ? "T" : (fretScalePosition+1).toString();
         }
 
@@ -29,6 +29,6 @@ const getFrets = (stringNum:string, note:number, octave:number, scaleNotes:strin
         note++;
     }
     return frets;
-}
+};
 
 export default getFrets;

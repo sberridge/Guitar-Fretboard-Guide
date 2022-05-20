@@ -1,8 +1,8 @@
 import React from "react";
-import { ChangeEventHandler } from "react"
+import { ChangeEventHandler } from "react";
 
-import notes from './../../lib/notes'
-import scales from './../../lib/scales'
+import notes from './../../lib/notes';
+import scales from './../../lib/scales';
 
 type scaleSelectProps = {
     onScaleChange: ChangeEventHandler<HTMLSelectElement>
@@ -11,15 +11,15 @@ type scaleSelectProps = {
 
 const renderNoteOpts = ()=>{
     return notes.map(note=>{
-        return <option key={note} value={note}>{note}</option>
-    })
-}
+        return <option key={note} value={note}>{note}</option>;
+    });
+};
 
 const renderScaleOpts = ()=>{
     return Array.from(scales.entries()).map((scale,i)=>{
-        return <option key={i} value={scale[1]}>{scale[0]}</option>
+        return <option key={i} value={scale[1]}>{scale[0]}</option>;
     });
-}
+};
 
 export default function ScaleSelect({onScaleChange,onRootChange}:scaleSelectProps) {
     return <div className="scale-control">
@@ -40,5 +40,5 @@ export default function ScaleSelect({onScaleChange,onRootChange}:scaleSelectProp
                 </select>
             </div>
         </div>
-    </div>
+    </div>;
 }

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Fretboard from './guitar/fretboard';
 import FretboardControls from './guitar/fretboardControls';
 import AudioPlayer from '../lib/AudioPlayer';
@@ -15,37 +15,37 @@ import getScaleNotes from './functions/getScaleNotes';
 
 
 const createString = (stringNum:number, tuning:note[], scaleNotes:string[], showAllNotes:boolean): guitarString => {
-  let string:guitarString = {
+  const string:guitarString = {
     openNote: tuning[stringNum].note,
     openOctave: tuning[stringNum].octave,
     openScaleNum: null,
     openVisible: scaleNotes.length == 0 && showAllNotes || scaleNotes.includes(tuning[stringNum].note),
     frets: [],
     stringKey: "string-" + stringNum.toString()
-  }
+  };
 
-  let notePosition = notes.indexOf(string.openNote) + 1;
-  let fretOctave = string.openOctave;
+  const notePosition = notes.indexOf(string.openNote) + 1;
+  const fretOctave = string.openOctave;
 
   if(scaleNotes.includes(string.openNote)) {
-    let openScalePosition = scaleNotes.indexOf(string.openNote);
+    const openScalePosition = scaleNotes.indexOf(string.openNote);
     string.openScaleNum = openScalePosition == 0 ? "T" : (openScalePosition+1).toString();
   }
 
   string.frets = getFrets(stringNum.toString(), notePosition, fretOctave, scaleNotes, showAllNotes);
   return string;
-}
+};
 
 
 const createStrings = (tuning:availableTunings, showAllNotes:boolean, scaleNotes:string[]): guitarString[] => {
-  let stateStrings:guitarString[] = [];
+  const stateStrings:guitarString[] = [];
   const selectedTuning = tunings.get(tuning);
   if(!selectedTuning) return stateStrings;
   for(let stringNum = 0; stringNum < 6; stringNum++) {
     stateStrings.push(createString(stringNum, selectedTuning, scaleNotes, showAllNotes));
   }
   return stateStrings;
-}
+};
 
 type guitarProps = {
   audioPlayer:AudioPlayer | null
@@ -79,15 +79,15 @@ const Guitar = ({audioPlayer}:guitarProps) => {
       setGuitarStrings(newGuitarStrings);
     }
     
-  }
+  };
   const showNotesHandler = (e:ChangeEvent<HTMLInputElement>)=>{
     const newGuitarStrings = createStrings(tuning, e.target.checked,scaleNotes);
     setGuitarStrings(newGuitarStrings);
     setShowAllNotes(e.target.checked);
-  }
+  };
 
   const playScale = (scale:number[]) => {
-    let note = scale.shift();
+    const note = scale.shift();
     if(note) {
       audioPlayer?.play(note);
     }
@@ -98,7 +98,7 @@ const Guitar = ({audioPlayer}:guitarProps) => {
     }
     
 
-  }
+  };
 
 
 
@@ -112,23 +112,23 @@ const Guitar = ({audioPlayer}:guitarProps) => {
       return;
     }
     
-    let newScaleNotes = getScaleNotes(newScaleRoot, newScale);
+    const newScaleNotes = getScaleNotes(newScaleRoot, newScale);
 
     const newGuitarStrings = createStrings(tuning, showAllNotes, newScaleNotes);
 
-    let octave:number = getStartingScaleOctave(newGuitarStrings[5], newScaleNotes[0]);
+    const octave:number = getStartingScaleOctave(newGuitarStrings[5], newScaleNotes[0]);
     
-    let newScaleFrequencies:number[] = getScaleFrequencies(newScaleNotes, octave);
+    const newScaleFrequencies:number[] = getScaleFrequencies(newScaleNotes, octave);
     playScale([...newScaleFrequencies]);
     setScaleFrequencies(newScaleFrequencies);
     setGuitarStrings(newGuitarStrings);
     setScale(newScale);
     setScaleRoot(newScaleRoot);
     setScaleNotes(newScaleNotes);
-  }
+  };
 
   const scaleRootHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
-    let newScaleRoot = e.target.value;
+    const newScaleRoot = e.target.value;
     setScaleRoot(newScaleRoot);
     setScaleNotes(scaleNotes);
     if((newScaleRoot !== "" || scaleRoot !== "") && scale !== "") {
@@ -137,7 +137,7 @@ const Guitar = ({audioPlayer}:guitarProps) => {
   };
   
   const scaleHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
-    let newScale = e.target.value;
+    const newScale = e.target.value;
     setScale(newScale);
     setScaleNotes([]);
     if((newScale !== "" || scale !== "") && scaleRoot !== "") {
@@ -145,12 +145,12 @@ const Guitar = ({audioPlayer}:guitarProps) => {
     }    
   };
 
-  const playScaleHandler = (e:MouseEvent<HTMLButtonElement>)=>{
+  const playScaleHandler = ()=>{
     if(!scaleFrequencies) {
       return false;
     }
     playScale([...scaleFrequencies]);
-  }
+  };
 
   return (
     <div>
@@ -175,8 +175,8 @@ const Guitar = ({audioPlayer}:guitarProps) => {
         ></Fretboard>
       </div>
     </div>
-  )
+  );
 
-}
+};
 
-export default Guitar
+export default Guitar;

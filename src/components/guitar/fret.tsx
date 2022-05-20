@@ -1,5 +1,5 @@
 import React from "react";
-import AudioPlayer from '../../lib/AudioPlayer'
+import AudioPlayer from '../../lib/AudioPlayer';
 import Note from './note';
 
 type fretProps = {
@@ -20,5 +20,5 @@ export default function Fret({note, octave, audioPlayer, visible, scaleNum}:fret
             visible={visible}
             scaleNum={scaleNum}
         ></Note>
-    </div>
+    </div>;
 }

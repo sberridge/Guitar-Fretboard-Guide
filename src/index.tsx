@@ -29,8 +29,8 @@ const App = ({title}: AppProps) => {
                 audioPlayer={audioPlayer}
             ></Guitar>            
         </div>
-    )
-}
+    );
+};
 
 const rootEl = document.getElementById('root');
 

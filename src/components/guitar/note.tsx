@@ -1,5 +1,5 @@
 import React from "react";
-import * as f from '../../lib/frequencies.json'
+import * as f from '../../lib/frequencies.json';
 type frequencyList = {
     [key:string]:number[]
 }
@@ -25,7 +25,7 @@ export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum
 
     const playNote = () =>{
         
-        let frequencyToPlay:number|null = null
+        let frequencyToPlay:number|null = null;
         if(octave) {
             const noteFrequencies = frequencies[note];
             if(noteFrequencies) {
@@ -38,7 +38,7 @@ export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum
         if(audioPlayer && frequencyToPlay) {
             setState({
                 playing: true
-            })
+            });
             audioPlayer.play(frequencyToPlay);
             setTimeout(()=>{
                 setState({
@@ -47,10 +47,10 @@ export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum
             },50);
         }
         
-    }
+    };
 
 
-    let noteClasses = [
+    const noteClasses = [
         "note"
     ];
     if(state.playing) {
@@ -60,8 +60,8 @@ export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum
         noteClasses.push("show");
     }
 
-    return <div onClick={()=>{playNote()}} className={noteClasses.join(" ")}>
+    return <div onClick={()=>{playNote();}} className={noteClasses.join(" ")}>
         <span>{note}</span>
         <div className="note__scale-num">{scaleNum}</div>
-    </div>
+    </div>;
 }
