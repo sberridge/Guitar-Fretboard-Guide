@@ -3,8 +3,11 @@ import React from "react";
 import * as ReactDOMClient from "react-dom/client";
 import Header from "./components/header";
 import Guitar from "./components/guitar";
-import AudioPlayer from "./lib/AudioPlayer";
 import LivePlayer from "./components/livePlayer";
+import audioPlayerContext from "./contexts/audioPlayerContext";
+import AudioPlayer from "./lib/AudioPlayer";
+
+
 
 type AppProps = {
     title:string
@@ -15,20 +18,19 @@ if(typeof window !== "undefined") {
   audioPlayer = new AudioPlayer();
 }
 
+
 const App = ({title}: AppProps) => {
     
     return (
+        <audioPlayerContext.Provider value={audioPlayer}>
         <div>
             <Header
                 title={title}
             ></Header>
-            <LivePlayer
-                audioPlayer={audioPlayer}
-            ></LivePlayer>
-            <Guitar
-                audioPlayer={audioPlayer}
-            ></Guitar>            
+            <LivePlayer></LivePlayer>
+            <Guitar></Guitar>            
         </div>
+        </audioPlayerContext.Provider>
     );
 };
 

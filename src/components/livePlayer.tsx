@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import AudioPlayer from "../lib/AudioPlayer";
+import React, { useContext, useState } from "react";
+import audioPlayerContext from "./../contexts/audioPlayerContext";
 
 type audioDevice = {
     label: string
@@ -11,12 +11,9 @@ type audioState = {
     selectedAudioDeviceId?: string | undefined
 }
 
-type livePlayerProps = {
-    audioPlayer:AudioPlayer | null
-}
+const LivePlayer = () => {
 
-const LivePlayer = ({audioPlayer}:livePlayerProps) => {
-
+    const audioPlayer = useContext(audioPlayerContext);
     const initialAudioState:audioState = {
         audioDevices: [],
         selectedAudioDeviceId: undefined

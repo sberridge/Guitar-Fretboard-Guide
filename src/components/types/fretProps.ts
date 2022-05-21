@@ -1,4 +1,3 @@
-import AudioPlayer from "../../lib/AudioPlayer";
 import note from "./note";
 
 type fretProps = {
@@ -7,7 +6,6 @@ type fretProps = {
     visible: boolean
     noteVisible: boolean
     scaleNum: string | null
-    audioPlayer: AudioPlayer | null
     onNoteClick?: (note:note)=>void
 }
 

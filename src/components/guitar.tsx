@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
 import Fretboard from './guitar/fretboard';
 import FretboardControls from './guitar/fretboardControls';
-import AudioPlayer from '../lib/AudioPlayer';
 import { tunings, availableTunings } from '../lib/tunings';
 import notes from '../lib/notes';
 import ScaleDisplay from './guitar/scaleDisplay';
@@ -11,6 +10,7 @@ import getScaleFrequencies from './functions/getScaleFrequencies';
 import getStartingScaleOctave from './functions/getStartingScaleOctave';
 import getFrets from './functions/getFrets';
 import getScaleNotes from './functions/getScaleNotes';
+import audioPlayerContext from './../contexts/audioPlayerContext';
 
 
 
@@ -48,12 +48,11 @@ const createStrings = (tuning:availableTunings, showAllNotes:boolean, scaleNotes
   return stateStrings;
 };
 
-type guitarProps = {
-  audioPlayer:AudioPlayer | null
-}
 
-const Guitar = ({audioPlayer}:guitarProps) => {
+const Guitar = () => {
   
+  const audioPlayer = useContext(audioPlayerContext);
+
   const [testing, setTesting] = useState(false);
   const [foundTestNotes, setFoundTestNotes] = useState<note[]>([]);
   const [tuning, setTuning] = useState<availableTunings>("standard");
@@ -185,7 +184,6 @@ const Guitar = ({audioPlayer}:guitarProps) => {
       {scaleNotes && scaleNotes.length > 0 && 
         <ScaleDisplay
           scaleNotes={scaleNotes.slice(0,8)}
-          audioPlayer={audioPlayer}
           scaleFrequencies={scaleFrequencies}
           testing={testing}
           onPlayScale={playScaleHandler}
@@ -194,7 +192,6 @@ const Guitar = ({audioPlayer}:guitarProps) => {
       }
       <div className='guitar'>
         <Fretboard
-          audioPlayer={audioPlayer}
           onNoteClick={noteClickHandler}
         >{newGuitarStrings}</Fretboard>
       </div>

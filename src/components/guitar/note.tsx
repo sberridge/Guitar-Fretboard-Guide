@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import audioPlayerContext from "../../contexts/audioPlayerContext";
 import * as f from '../../lib/frequencies.json';
 type frequencyList = {
     [key:string]:number[]
@@ -6,21 +7,19 @@ type frequencyList = {
 const frequencies:frequencyList = f;
 
 import { useState } from "react";
-import AudioPlayer from "../../lib/AudioPlayer";
 import note from "../types/note";
 
 type noteProps = {
     note:string
     octave?:number
     frequency?:number
-    audioPlayer:AudioPlayer | null
     visible: boolean
     noteVisible: boolean
     scaleNum: string | null
     onClick?:(note:note)=>void
 }
-export default function Note({note,octave,frequency,audioPlayer,visible,noteVisible,scaleNum,onClick}:noteProps) {
-
+export default function Note({note,octave,frequency,visible,noteVisible,scaleNum,onClick}:noteProps) {
+    const audioPlayer = useContext(audioPlayerContext);
 
     const [state,setState] = useState({
         "playing": false

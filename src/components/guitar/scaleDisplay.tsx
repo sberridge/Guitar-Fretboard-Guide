@@ -1,17 +1,15 @@
 import React from "react";
 import { MouseEventHandler } from "react";
-import AudioPlayer from "../../lib/AudioPlayer";
 import Note from "./note";
 
 type scaleDisplayProps = {
     scaleNotes: string[]
     scaleFrequencies: number[]
-    audioPlayer: AudioPlayer | null
     testing: boolean
     onPlayScale: MouseEventHandler<HTMLButtonElement>
     toggleTesting: ()=>void
 }
-export default function ScaleDisplay({scaleFrequencies,scaleNotes,audioPlayer,onPlayScale, testing, toggleTesting}:scaleDisplayProps) {
+export default function ScaleDisplay({scaleFrequencies,scaleNotes,onPlayScale, testing, toggleTesting}:scaleDisplayProps) {
     const renderScaleNotes = ()=>{
         return scaleNotes.map((note,i)=>{
             return <Note
@@ -21,7 +19,6 @@ export default function ScaleDisplay({scaleFrequencies,scaleNotes,audioPlayer,on
                         frequency={scaleFrequencies[i]}
                         visible={true}
                         noteVisible={true}
-                        audioPlayer={audioPlayer}
                     ></Note>;
         });
     };
