@@ -2,6 +2,8 @@ import React from "react";
 import AudioPlayer from "../../lib/AudioPlayer";
 import Fret from "./fret";
 import OpenFret from "./openFret";
+import guitarString from "../types/guitarString";
+import fret from "../types/fret";
 
 function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
     return <Fret
@@ -14,21 +16,7 @@ function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
         key={fret.fretKey}
     ></Fret>;
 }
-type fret = {
-    note: string
-    octave: number
-    fretKey: string
-    visible: boolean
-    scaleNum: string | null
-}
-type guitarString = {
-    openNote: string
-    openOctave: number
-    openVisible: boolean
-    stringKey: string
-    frets: fret[]
-    openScaleNum: string | null
-}
+
 
 type guitarStringProps = {
     guitarString:guitarString

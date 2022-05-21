@@ -18,7 +18,7 @@ export default class AudioPlayer {
         gain.connect(this.audioCtx.destination);
         ocilator.start(0);
         gain.gain.exponentialRampToValueAtTime(
-            0.00001,this.audioCtx.currentTime + 1
+            0.00001,this.audioCtx.currentTime + 3
         );
     }
 
