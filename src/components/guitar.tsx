@@ -104,6 +104,7 @@ const Guitar = () => {
       setScaleNotes([]);
       setScaleRoot(newScaleRoot);
       setScale(newScale);
+      setTesting(false);
       return;
     }
     
@@ -157,8 +158,11 @@ const Guitar = () => {
     const octaveScaleNotes = [...scaleNotes].slice(0, scaleNotes.length-1);
     let nextNoteIndex:number = foundTestNotes.length == 0 ? 0 : foundTestNotes.length;
     let expectedOctave:number | undefined;
-    if(nextNoteIndex >= octaveScaleNotes.length) {
-      const octavesComplete = Math.floor(foundTestNotes.length / octaveScaleNotes.length);
+    const octavesComplete = Math.floor(foundTestNotes.length / octaveScaleNotes.length);
+    if(foundTestNotes.length > 0) {
+      expectedOctave = foundTestNotes[0].octave + octavesComplete;
+    }
+    if(nextNoteIndex >= octaveScaleNotes.length) {      
       nextNoteIndex = nextNoteIndex - (octaveScaleNotes.length * Math.floor(octavesComplete));
       expectedOctave = foundTestNotes[0].octave + octavesComplete;
     }

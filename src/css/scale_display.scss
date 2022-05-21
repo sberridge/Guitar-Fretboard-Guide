@@ -1,0 +1,32 @@
+.scale-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px 5px;
+    background: #553434;
+    margin: 10px 0;
+    max-width: 1078px;
+    .scale-display__notes {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .note {
+        margin: 0 5px;
+    }
+    .play-button {
+        background-image: url('./../images/icons/play-icon.png');
+
+        width: 30px;
+        height: 30px;
+        background-size: 20px;
+        background-color: #fff;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        background-position: center center;
+        border: 2px solid #ccc;
+        cursor: pointer;
+    }
+}
