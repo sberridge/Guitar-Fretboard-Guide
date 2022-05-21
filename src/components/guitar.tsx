@@ -158,17 +158,15 @@ const Guitar = () => {
     let nextNoteIndex:number = foundTestNotes.length == 0 ? 0 : foundTestNotes.length;
     let expectedOctave:number | undefined;
     if(nextNoteIndex >= octaveScaleNotes.length) {
-      nextNoteIndex = nextNoteIndex - octaveScaleNotes.length;
-      if(octaveScaleNotes.length > 0) {
-        expectedOctave = foundTestNotes[0].octave + 1;
-      }
+      const octavesComplete = Math.floor(foundTestNotes.length / octaveScaleNotes.length);
+      nextNoteIndex = nextNoteIndex - (octaveScaleNotes.length * Math.floor(octavesComplete));
+      expectedOctave = foundTestNotes[0].octave + octavesComplete;
     }
     const expectedNote = octaveScaleNotes[nextNoteIndex];
     if(note.note == expectedNote) {
       if(expectedOctave && note.octave !== expectedOctave) return;
       setFoundTestNotes([...foundTestNotes, {...note}]);
     }
-    console.log(note, nextNoteIndex, expectedNote);
   };
 
   const newGuitarStrings = createStrings(tuning, showAllNotes, scaleNotes, testing, foundTestNotes);
