@@ -4,16 +4,19 @@ import Fret from "./fret";
 import OpenFret from "./openFret";
 import guitarString from "../types/guitarString";
 import fret from "../types/fret";
+import note from "../types/note";
+import onNoteClick from "../types/onNoteClick";
 
-function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
+function renderFret(fret:fret, audioPlayer:AudioPlayer | null, onNoteClick:onNoteClick) {
     return <Fret
         note={fret.note}
         octave={fret.octave}
         visible={fret.visible}
+        noteVisible={fret.noteVisible}
         audioPlayer={audioPlayer}
         scaleNum={fret.scaleNum}
-        fretKey={fret.fretKey}
         key={fret.fretKey}
+        onNoteClick={onNoteClick}
     ></Fret>;
 }
 
@@ -21,31 +24,30 @@ function renderFret(fret:fret, audioPlayer:AudioPlayer | null) {
 type guitarStringProps = {
     guitarString:guitarString
     audioPlayer: AudioPlayer | null
+    onNoteClick:(note:note)=>void
 }
 
-const createFrets = (guitarString:guitarString, audioPlayer:AudioPlayer|null) => {
+const createFrets = (guitarString:guitarString, audioPlayer:AudioPlayer|null, onNoteClick:onNoteClick) => {
     const frets:JSX.Element[] = [];
     for(let i = 0; i < guitarString.frets.length; i++) {
-        frets.push(renderFret(guitarString.frets[i], audioPlayer));
+        frets.push(renderFret(guitarString.frets[i], audioPlayer, onNoteClick));
     }
     return frets;
 };
 
-export default function GuitarString({guitarString,audioPlayer}:guitarStringProps) {
+export default function GuitarString({guitarString,audioPlayer,onNoteClick}:guitarStringProps) {
     
-    const frets = createFrets(guitarString, audioPlayer);
-
-    const stringKey = guitarString.stringKey;
-    const stringNum = parseInt(stringKey.split('-')[1]);
+    const frets = createFrets(guitarString, audioPlayer, onNoteClick);
 
     return <div className="fretboard__string">
         <OpenFret
             note={guitarString.openNote}
             octave={guitarString.openOctave}
+            noteVisible={guitarString.openNoteVisible}
             visible={guitarString.openVisible}
             scaleNum={guitarString.openScaleNum}
-            stringNum={stringNum}
             audioPlayer={audioPlayer}
+            onNoteClick={onNoteClick}
         ></OpenFret>
         {frets}
     </div>;

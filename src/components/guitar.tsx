@@ -14,12 +14,13 @@ import getScaleNotes from './functions/getScaleNotes';
 
 
 
-const createString = (stringNum:number, tuning:note[], scaleNotes:string[], showAllNotes:boolean): guitarString => {
+const createString = (stringNum:number, tuning:note[], scaleNotes:string[], showAllNotes:boolean, testing:boolean, foundTestNotes:note[]): guitarString => {
   const string:guitarString = {
     openNote: tuning[stringNum].note,
+    openNoteVisible: !testing || foundTestNotes.some((note)=>{return note.note == tuning[stringNum].note && note.octave == tuning[stringNum].octave;}),
     openOctave: tuning[stringNum].octave,
     openScaleNum: null,
-    openVisible: scaleNotes.length == 0 && showAllNotes || scaleNotes.includes(tuning[stringNum].note),
+    openVisible: testing || scaleNotes.length == 0 && showAllNotes || scaleNotes.includes(tuning[stringNum].note),
     frets: [],
     stringKey: "string-" + stringNum.toString()
   };
@@ -32,17 +33,17 @@ const createString = (stringNum:number, tuning:note[], scaleNotes:string[], show
     string.openScaleNum = openScalePosition == 0 ? "T" : (openScalePosition+1).toString();
   }
 
-  string.frets = getFrets(stringNum.toString(), notePosition, fretOctave, scaleNotes, showAllNotes);
+  string.frets = getFrets(stringNum.toString(), notePosition, fretOctave, scaleNotes, showAllNotes, testing, foundTestNotes);
   return string;
 };
 
 
-const createStrings = (tuning:availableTunings, showAllNotes:boolean, scaleNotes:string[]): guitarString[] => {
+const createStrings = (tuning:availableTunings, showAllNotes:boolean, scaleNotes:string[], testing:boolean, foundTestNotes:note[]): guitarString[] => {
   const stateStrings:guitarString[] = [];
   const selectedTuning = tunings.get(tuning);
   if(!selectedTuning) return stateStrings;
   for(let stringNum = 0; stringNum < 6; stringNum++) {
-    stateStrings.push(createString(stringNum, selectedTuning, scaleNotes, showAllNotes));
+    stateStrings.push(createString(stringNum, selectedTuning, scaleNotes, showAllNotes, testing, foundTestNotes));
   }
   return stateStrings;
 };
@@ -53,14 +54,15 @@ type guitarProps = {
 
 const Guitar = ({audioPlayer}:guitarProps) => {
   
-
-  const [guitarStrings, setGuitarStrings] = useState(createStrings("standard", false, []));
+  const [testing, setTesting] = useState(false);
+  const [foundTestNotes, setFoundTestNotes] = useState<note[]>([]);
   const [tuning, setTuning] = useState<availableTunings>("standard");
   const [scaleNotes, setScaleNotes] = useState<string[]>([]);
   const [scaleFrequencies, setScaleFrequencies] = useState<number[]>([]);
   const [scale, setScale] = useState("");
   const [scaleRoot, setScaleRoot] = useState("");
   const [showAllNotes, setShowAllNotes] = useState(false);
+  
 
   const tuningHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
     let newTuning:availableTunings | undefined = undefined;
@@ -74,15 +76,11 @@ const Guitar = ({audioPlayer}:guitarProps) => {
         break;
     }
     if(typeof newTuning !== "undefined") {
-      const newGuitarStrings = createStrings(newTuning, showAllNotes, scaleNotes);
       setTuning(newTuning);
-      setGuitarStrings(newGuitarStrings);
     }
     
   };
   const showNotesHandler = (e:ChangeEvent<HTMLInputElement>)=>{
-    const newGuitarStrings = createStrings(tuning, e.target.checked,scaleNotes);
-    setGuitarStrings(newGuitarStrings);
     setShowAllNotes(e.target.checked);
   };
 
@@ -107,24 +105,20 @@ const Guitar = ({audioPlayer}:guitarProps) => {
       setScaleNotes([]);
       setScaleRoot(newScaleRoot);
       setScale(newScale);
-      const newGuitarStrings = createStrings(tuning, showAllNotes, []);
-      setGuitarStrings(newGuitarStrings);
       return;
     }
     
     const newScaleNotes = getScaleNotes(newScaleRoot, newScale);
-
-    const newGuitarStrings = createStrings(tuning, showAllNotes, newScaleNotes);
 
     const octave:number = getStartingScaleOctave(newGuitarStrings[5], newScaleNotes[0]);
     
     const newScaleFrequencies:number[] = getScaleFrequencies(newScaleNotes, octave);
     playScale([...newScaleFrequencies]);
     setScaleFrequencies(newScaleFrequencies);
-    setGuitarStrings(newGuitarStrings);
     setScale(newScale);
     setScaleRoot(newScaleRoot);
     setScaleNotes(newScaleNotes);
+    setFoundTestNotes([]);
   };
 
   const scaleRootHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
@@ -152,6 +146,34 @@ const Guitar = ({audioPlayer}:guitarProps) => {
     playScale([...scaleFrequencies]);
   };
 
+  const toggleTesting = ()=>{
+    if(testing) {
+      setFoundTestNotes([]);
+    }
+    setTesting(!testing);
+  };
+
+  const noteClickHandler = (note:note)=>{
+    if(!testing) return;
+    const octaveScaleNotes = [...scaleNotes].slice(0, scaleNotes.length-1);
+    let nextNoteIndex:number = foundTestNotes.length == 0 ? 0 : foundTestNotes.length;
+    let expectedOctave:number | undefined;
+    if(nextNoteIndex >= octaveScaleNotes.length) {
+      nextNoteIndex = nextNoteIndex - octaveScaleNotes.length;
+      if(octaveScaleNotes.length > 0) {
+        expectedOctave = foundTestNotes[0].octave + 1;
+      }
+    }
+    const expectedNote = octaveScaleNotes[nextNoteIndex];
+    if(note.note == expectedNote) {
+      if(expectedOctave && note.octave !== expectedOctave) return;
+      setFoundTestNotes([...foundTestNotes, {...note}]);
+    }
+    console.log(note, nextNoteIndex, expectedNote);
+  };
+
+  const newGuitarStrings = createStrings(tuning, showAllNotes, scaleNotes, testing, foundTestNotes);
+
   return (
     <div>
       <FretboardControls
@@ -165,14 +187,16 @@ const Guitar = ({audioPlayer}:guitarProps) => {
           scaleNotes={scaleNotes.slice(0,8)}
           audioPlayer={audioPlayer}
           scaleFrequencies={scaleFrequencies}
+          testing={testing}
           onPlayScale={playScaleHandler}
+          toggleTesting={toggleTesting}
         ></ScaleDisplay>
       }
       <div className='guitar'>
         <Fretboard
-          guitarStrings={guitarStrings}
           audioPlayer={audioPlayer}
-        ></Fretboard>
+          onNoteClick={noteClickHandler}
+        >{newGuitarStrings}</Fretboard>
       </div>
     </div>
   );

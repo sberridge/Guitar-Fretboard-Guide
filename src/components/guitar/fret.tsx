@@ -1,24 +1,17 @@
 import React from "react";
-import AudioPlayer from '../../lib/AudioPlayer';
+import fretProps from "../types/fretProps";
 import Note from './note';
-
-type fretProps = {
-    note: string
-    visible: boolean
-    octave: number
-    fretKey: string
-    scaleNum: string | null
-    audioPlayer: AudioPlayer | null
-}
-export default function Fret({note, octave, audioPlayer, visible, scaleNum}:fretProps) {
+export default function Fret({note, octave, audioPlayer, visible, noteVisible, scaleNum, onNoteClick}:fretProps) {
     return <div className="fretboard__fret">
         <div className="fretboard__fret-string"></div>
         <Note
             note={note}
             octave={octave}
             audioPlayer={audioPlayer}
+            noteVisible={noteVisible}
             visible={visible}
             scaleNum={scaleNum}
+            onClick={onNoteClick}
         ></Note>
     </div>;
 }

@@ -1,6 +1,7 @@
 import fret from './fret';
 type guitarString = {
     openNote: string
+    openNoteVisible:boolean
     openOctave: number
     openVisible: boolean
     openScaleNum: string | null

@@ -7,6 +7,7 @@ const frequencies:frequencyList = f;
 
 import { useState } from "react";
 import AudioPlayer from "../../lib/AudioPlayer";
+import note from "../types/note";
 
 type noteProps = {
     note:string
@@ -14,9 +15,11 @@ type noteProps = {
     frequency?:number
     audioPlayer:AudioPlayer | null
     visible: boolean
+    noteVisible: boolean
     scaleNum: string | null
+    onClick?:(note:note)=>void
 }
-export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum}:noteProps) {
+export default function Note({note,octave,frequency,audioPlayer,visible,noteVisible,scaleNum,onClick}:noteProps) {
 
 
     const [state,setState] = useState({
@@ -46,6 +49,9 @@ export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum
                 });
             },50);
         }
+        if(onClick && octave) {
+            onClick({note,octave});
+        }
         
     };
 
@@ -61,7 +67,7 @@ export default function Note({note,octave,frequency,audioPlayer,visible,scaleNum
     }
 
     return <div onClick={()=>{playNote();}} className={noteClasses.join(" ")}>
-        <span>{note}</span>
-        <div className="note__scale-num">{scaleNum}</div>
+        <span>{noteVisible ? note : ""}</span>
+        <div className="note__scale-num">{noteVisible ? scaleNum : ""}</div>
     </div>;
 }
