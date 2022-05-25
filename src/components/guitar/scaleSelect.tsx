@@ -23,21 +23,29 @@ const renderScaleOpts = ()=>{
 
 export default function ScaleSelect({onScaleChange,onRootChange}:scaleSelectProps) {
     return <div className="scale-control">
-        <h3>Scale</h3>
+        <h3 className="has-text-light title is-6 mb-0">Scale</h3>
         <div className="scale-control__controls">
             <div className="scale-control__control">
-                <h4>Root</h4>
-                <select onChange={onRootChange}>
-                    <option></option>
-                    {renderNoteOpts()}
-                </select>
+                <div className="field">
+                    <label className="label has-text-light" htmlFor="scale-root-select">Root</label>
+                    <div className="control">
+                        <select id="scale-root-select" className="select" onChange={onRootChange}>
+                            <option></option>
+                            {renderNoteOpts()}
+                        </select>
+                    </div>
+                </div>
             </div>
             <div className="scale-control__control">
-                <h4>Scale</h4>
-                <select onChange={onScaleChange}>
-                    <option></option>
-                    {renderScaleOpts()}
-                </select>
+                <div className="field">
+                    <label className="label has-text-light" htmlFor="scale-scale-select">Scale</label>
+                    <div className="control">
+                        <select id="scale-scale-select" className="select" onChange={onScaleChange}>
+                            <option></option>
+                            {renderScaleOpts()}
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>;

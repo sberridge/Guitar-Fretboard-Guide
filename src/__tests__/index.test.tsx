@@ -6,8 +6,8 @@ import App from "..";
 const createApp = (props:{title:string}) => {
     return <App
         title={props.title}
-    ></App>
-}
+    ></App>;
+};
 
 describe("Main App Test",()=>{
     it("should render the app",()=>{
@@ -16,5 +16,5 @@ describe("Main App Test",()=>{
         expect(comp.baseElement).toMatchSnapshot();
         expect(comp.queryByRole("heading", {name: "MyApp"})).toBeTruthy();
 
-    })
-})
+    });
+});

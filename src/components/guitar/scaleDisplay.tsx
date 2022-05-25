@@ -27,6 +27,6 @@ export default function ScaleDisplay({scaleFrequencies,scaleNotes,onPlayScale, t
             {renderScaleNotes()}    
         </div>
         <button className="play-button" onClick={onPlayScale}></button>
-        <button onClick={toggleTesting}>{testing ? "Cancel" : "Test yourself"}</button>
+        <button className="button is-white is-small mt-2" onClick={toggleTesting}>{testing ? "Cancel" : "Test Yourself"}</button>
     </div>;
 }

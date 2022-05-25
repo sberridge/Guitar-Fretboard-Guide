@@ -1,7 +1,7 @@
 .guitar {
     display: flex;
     justify-content: center;
-    @media (min-width: 1086px) {
+    @media (min-width: 1216px) {
         justify-content: left;
     }
 }
@@ -69,7 +69,7 @@
         }
     }
 
-    @media (min-width: 1086px) {
+    @media (min-width: 1216px) {
         flex-direction: column;  
         &__string {
         flex-direction: row;

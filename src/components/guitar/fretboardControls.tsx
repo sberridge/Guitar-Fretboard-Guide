@@ -12,7 +12,7 @@ type fretboardControlProps = {
 }
 
 export default function FretboardControls({onTuningChange, onScaleChange, onScaleRootChange, onShowNotesChange}:fretboardControlProps) {
-    return <div className="fretboard-controls">
+    return <div className="fretboard-controls mb-4">
         <div className="fretboard-controls__control">
             <TuningSelect
                 onChange={onTuningChange}

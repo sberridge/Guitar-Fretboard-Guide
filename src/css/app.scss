@@ -1,3 +1,11 @@
+$black: hsl(0, 2%, 12%);
+$scheme-main: $black;
+$scheme-main-bis: $black;
+$scheme-main-ter: $black;
+$scheme-invert: hsl(0, 0%, 100%);
+$scheme-invert-bis: hsl(0, 0%, 100%);
+$scheme-invert-ter: hsl(0, 0%, 100%);
+@import "./../../node_modules/bulma/bulma.sass";
 @font-face {
   font-family: Roboto;
   src: url("./../fonts/Roboto-Regular.ttf") format("truetype");
@@ -18,6 +26,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
 
 
 

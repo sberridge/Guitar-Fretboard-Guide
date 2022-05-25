@@ -94,14 +94,17 @@ const LivePlayer = () => {
 
     return <section className="play-live-section">
         {!audioState.audioDevices || audioState.audioDevices.length == 0 &&
-            <button className="play-live-button" onClick={initiateLivePlaying}>Play Live</button>
+            <button className="button is-white" onClick={initiateLivePlaying}>Play Live</button>
         }
         {audioState.audioDevices && audioState.audioDevices.length > 0 &&
-            <div>
-                <label htmlFor="live-audio-input-select">Select Input</label>
-                <select id="live-audio-input-select" onChange={(e)=>{audioDeviceChange(e.target.value);}} value={audioState.selectedAudioDeviceId}>
-                    {renderInputOpts()}
-                </select>
+            <div className="field">
+
+                <label className="label has-text-light" htmlFor="live-audio-input-select">Select Input</label>
+                <div className="control">
+                    <select className="select" id="live-audio-input-select" onChange={(e)=>{audioDeviceChange(e.target.value);}} value={audioState.selectedAudioDeviceId}>
+                        {renderInputOpts()}
+                    </select>
+                </div>
             </div>
         }      
     </section>;
