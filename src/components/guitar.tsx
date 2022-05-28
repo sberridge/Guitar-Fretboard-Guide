@@ -1,55 +1,19 @@
 import React, { ChangeEvent, useContext, useState } from 'react';
 import Fretboard from './guitar/fretboard';
 import FretboardControls from './guitar/fretboardControls';
-import { tunings, availableTunings } from '../lib/tunings';
-import notes from '../lib/notes';
+import { availableTunings } from '../lib/tunings';
 import ScaleDisplay from './guitar/scaleDisplay';
 import note from './types/note';
-import guitarString from './types/guitarString';
 import getScaleFrequencies from './functions/getScaleFrequencies';
 import playScale from './functions/playScale';
 import getStartingScaleOctave from './functions/getStartingScaleOctave';
-import getFrets from './functions/getFrets';
+import createStrings from './functions/createStrings';
 import getScaleNotes from './functions/getScaleNotes';
 import audioPlayerContext from './../contexts/audioPlayerContext';
 import getExpectedNote from './functions/scaleGame/getExpectedNote';
 import getExpectedOctave from './functions/scaleGame/getExpectedOctave';
 
 
-
-const createString = (stringNum:number, tuning:note[], scaleNotes:string[], showAllNotes:boolean, testing:boolean, foundTestNotes:note[]): guitarString => {
-  const string:guitarString = {
-    openNote: tuning[stringNum].note,
-    openNoteVisible: !testing || foundTestNotes.some((note)=>{return note.note == tuning[stringNum].note && note.octave == tuning[stringNum].octave;}),
-    openOctave: tuning[stringNum].octave,
-    openScaleNum: null,
-    openVisible: testing || scaleNotes.length == 0 && showAllNotes || scaleNotes.includes(tuning[stringNum].note),
-    frets: [],
-    stringKey: "string-" + stringNum.toString()
-  };
-
-  const notePosition = notes.indexOf(string.openNote) + 1;
-  const fretOctave = string.openOctave;
-
-  if(scaleNotes.includes(string.openNote)) {
-    const openScalePosition = scaleNotes.indexOf(string.openNote);
-    string.openScaleNum = openScalePosition == 0 ? "T" : (openScalePosition+1).toString();
-  }
-
-  string.frets = getFrets(stringNum.toString(), notePosition, fretOctave, scaleNotes, showAllNotes, testing, foundTestNotes);
-  return string;
-};
-
-
-const createStrings = (tuning:availableTunings, showAllNotes:boolean, scaleNotes:string[], testing:boolean, foundTestNotes:note[]): guitarString[] => {
-  const stateStrings:guitarString[] = [];
-  const selectedTuning = tunings.get(tuning);
-  if(!selectedTuning) return stateStrings;
-  for(let stringNum = 0; stringNum < 6; stringNum++) {
-    stateStrings.push(createString(stringNum, selectedTuning, scaleNotes, showAllNotes, testing, foundTestNotes));
-  }
-  return stateStrings;
-};
 
 
 const Guitar = () => {
@@ -67,20 +31,8 @@ const Guitar = () => {
   
 
   const tuningHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
-    let newTuning:availableTunings | undefined = undefined;
-    switch(e.target.value) {
-      case "standard":
-      case "dropd":
-      case "ddropd":
-      case "dadgad":
-      case "opend":
-        newTuning = e.target.value;
-        break;
-    }
-    if(newTuning) {
-      setTuning(newTuning);
-    }
-    
+    const newTuning:availableTunings = e.target.value as availableTunings;
+    setTuning(newTuning);    
   };
   const showNotesHandler = (e:ChangeEvent<HTMLInputElement>)=>{
     setShowAllNotes(e.target.checked);
@@ -121,7 +73,6 @@ const Guitar = () => {
     const newScale = e.target.value;
     setScale(newScale);
     setScaleNotes([]);
-    console.log(scale);
     if((newScale !== "" || scale !== "") && scaleRoot !== "") {
       setNewScaleNotes(scaleRoot, newScale);
     }    
