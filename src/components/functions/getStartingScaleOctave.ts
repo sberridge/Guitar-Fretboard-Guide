@@ -1,14 +1,12 @@
 import guitarString from "../types/guitarString";
-const memo:Map<[string,string],number> = new Map();
+const memo:Map<string,number> = new Map();
 const getStartingScaleOctave = (string:guitarString, note:string) => {
-    const memoKey:[string, string] = [string.openNote, note];
-    if(memo.has(memoKey)) {
-        const octave = memo.get(memoKey);
-        if(octave) {
-            return octave;
-        }
+    const memoKey = `${string.openNote} : ${note}`;
+    let octave = memo.get(memoKey);
+    if(octave) {
+        return octave;
     }
-    let octave = 0;
+    octave = 0;
     if(string.openNote == note) {
         octave = string.openOctave;
     } else {

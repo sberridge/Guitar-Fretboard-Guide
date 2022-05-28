@@ -4,7 +4,13 @@ type frequencyList = {
     [key:string]:number[]
 }
 const frequencies:frequencyList = f;
+const memo:Map<string,number[]> = new Map();
 const getScaleFrequencies = (scaleNotes:string[], octave:number) => {
+    const key = `${scaleNotes.join("-")}: ${octave}`;
+    const memoed = memo.get(key);
+    if(memoed) {
+        return memoed;
+    }
     let scaleFrequencies:number[] = [];
     if(scaleNotes[0] in frequencies) {
         scaleNotes = [...scaleNotes.slice(0,scaleNotes.length-1),...scaleNotes];
@@ -18,6 +24,7 @@ const getScaleFrequencies = (scaleNotes:string[], octave:number) => {
             return frequencies[note][octave];
         });
     }
+    memo.set(key, scaleFrequencies);
     return scaleFrequencies;
 };
 
