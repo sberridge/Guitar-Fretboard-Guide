@@ -77,7 +77,7 @@ const Guitar = () => {
         newTuning = e.target.value;
         break;
     }
-    if(typeof newTuning !== "undefined") {
+    if(newTuning) {
       setTuning(newTuning);
     }
     
@@ -121,6 +121,7 @@ const Guitar = () => {
     const newScale = e.target.value;
     setScale(newScale);
     setScaleNotes([]);
+    console.log(scale);
     if((newScale !== "" || scale !== "") && scaleRoot !== "") {
       setNewScaleNotes(scaleRoot, newScale);
     }    
