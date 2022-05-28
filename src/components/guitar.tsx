@@ -7,10 +7,13 @@ import ScaleDisplay from './guitar/scaleDisplay';
 import note from './types/note';
 import guitarString from './types/guitarString';
 import getScaleFrequencies from './functions/getScaleFrequencies';
+import playScale from './functions/playScale';
 import getStartingScaleOctave from './functions/getStartingScaleOctave';
 import getFrets from './functions/getFrets';
 import getScaleNotes from './functions/getScaleNotes';
 import audioPlayerContext from './../contexts/audioPlayerContext';
+import getExpectedNote from './functions/scaleGame/getExpectedNote';
+import getExpectedOctave from './functions/scaleGame/getExpectedOctave';
 
 
 
@@ -83,22 +86,6 @@ const Guitar = () => {
     setShowAllNotes(e.target.checked);
   };
 
-  const playScale = (scale:number[]) => {
-    const note = scale.shift();
-    if(note) {
-      audioPlayer?.play(note);
-    }
-    if(scale.length > 0) {
-      setTimeout(()=>{
-        playScale(scale);
-      },500);
-    }
-    
-
-  };
-
-
-
   const setNewScaleNotes = (newScaleRoot: string, newScale: string)=>{
     if(newScale == "" || newScaleRoot == "") {
       setScaleNotes([]);
@@ -113,7 +100,7 @@ const Guitar = () => {
     const octave:number = getStartingScaleOctave(newGuitarStrings[5], newScaleNotes[0]);
     
     const newScaleFrequencies:number[] = getScaleFrequencies(newScaleNotes, octave);
-    playScale([...newScaleFrequencies]);
+    playScale([...newScaleFrequencies], audioPlayer);
     setScaleFrequencies(newScaleFrequencies);
     setScale(newScale);
     setScaleRoot(newScaleRoot);
@@ -143,7 +130,7 @@ const Guitar = () => {
     if(!scaleFrequencies) {
       return false;
     }
-    playScale([...scaleFrequencies]);
+    playScale([...scaleFrequencies], audioPlayer);
   };
 
   const toggleTesting = ()=>{
@@ -153,34 +140,12 @@ const Guitar = () => {
     setTesting(!testing);
   };
 
-
   const noteClickHandler = (note:note)=>{
     if(!testing) return;
-    const octaveScaleNotes = [...scaleNotes].slice(0, scaleNotes.length-1);
-    let nextNoteIndex:number = foundTestNotes.length == 0 ? 0 : foundTestNotes.length;
-    let expectedOctave:number | undefined;
-    
-    const octavesComplete = Math.floor(foundTestNotes.length / octaveScaleNotes.length);
+    const octaveScaleNotes = [...scaleNotes].slice(0, scaleNotes.length-1);    
 
-    if(nextNoteIndex >= octaveScaleNotes.length) {      
-      nextNoteIndex = nextNoteIndex - (octaveScaleNotes.length * Math.floor(octavesComplete));
-    }
-
-    const expectedNote = octaveScaleNotes[nextNoteIndex];
-
-    if(foundTestNotes.length > 0) {
-      expectedOctave = foundTestNotes[foundTestNotes.length - 1].octave;
-      if(octaveScaleNotes[0] === "C" && expectedNote === "C") {
-        expectedOctave++;
-      } else {
-        const previousNoteIndex = notes.indexOf(foundTestNotes[foundTestNotes.length - 1].note);
-        const thisNoteIndex = notes.indexOf(expectedNote);
-        if(thisNoteIndex < previousNoteIndex) {
-          expectedOctave++;
-        }
-      }
-    }
-
+    const expectedNote = getExpectedNote(octaveScaleNotes, foundTestNotes.length);
+    const expectedOctave = getExpectedOctave(octaveScaleNotes[0], expectedNote, foundTestNotes);
     
     if(note.note == expectedNote) {
       if(expectedOctave && note.octave !== expectedOctave) return;
