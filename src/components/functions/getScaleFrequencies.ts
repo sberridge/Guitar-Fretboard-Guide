@@ -5,11 +5,11 @@ type frequencyList = {
 }
 const frequencies:frequencyList = f;
 const getScaleFrequencies = (scaleNotes:string[], octave:number) => {
-    let newScaleFrequencies:number[] = [];
+    let scaleFrequencies:number[] = [];
     if(scaleNotes[0] in frequencies) {
         scaleNotes = [...scaleNotes.slice(0,scaleNotes.length-1),...scaleNotes];
         let previousPosition = notes.indexOf(scaleNotes[0]);
-        newScaleFrequencies = scaleNotes.map((note,i)=>{
+        scaleFrequencies = scaleNotes.map((note,i)=>{
             const thisPosition = notes.indexOf(note);
             if((scaleNotes[0] == "C" && i > 0 && note == "C") || previousPosition > thisPosition) {
                 octave++;
@@ -18,7 +18,7 @@ const getScaleFrequencies = (scaleNotes:string[], octave:number) => {
             return frequencies[note][octave];
         });
     }
-    return newScaleFrequencies;
+    return scaleFrequencies;
 };
 
 export default getScaleFrequencies;

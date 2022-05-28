@@ -24,19 +24,19 @@ const App = ({title}: AppProps) => {
     return (
         <audioPlayerContext.Provider value={audioPlayer}>
         <div>
-            <div className="section">
+            <section className="section">
                 <Header
                     title={title}
                 ></Header>
-            </div>
-            <div className="container">
+            </section>
+            <section className="container">
                 <LivePlayer></LivePlayer>
-            </div>
-            <div className="section">
+            </section>
+            <section className="section">
                 <div className="container">
                     <Guitar></Guitar>    
                 </div>        
-            </div>
+            </section>
         </div>
         </audioPlayerContext.Provider>
     );

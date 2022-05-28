@@ -31,7 +31,7 @@ export default function ScaleDisplay({scaleFrequencies,scaleNotes,onPlayScale, t
                 <button className="play-button" onClick={onPlayScale}></button>
             </div>
             <div className="column">
-                <button className="button is-white is-small" onClick={toggleTesting}>{testing ? "Cancel" : "Test Yourself"}</button>
+                <button className={`button is-small ${testing ? "is-danger" : "is-info"}`} onClick={toggleTesting}>{testing ? "Exit" : "Test Yourself"}</button>
             </div>
         </div>
     </div>;

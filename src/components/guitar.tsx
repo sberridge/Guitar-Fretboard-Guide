@@ -153,20 +153,35 @@ const Guitar = () => {
     setTesting(!testing);
   };
 
+
   const noteClickHandler = (note:note)=>{
     if(!testing) return;
     const octaveScaleNotes = [...scaleNotes].slice(0, scaleNotes.length-1);
     let nextNoteIndex:number = foundTestNotes.length == 0 ? 0 : foundTestNotes.length;
     let expectedOctave:number | undefined;
+    
     const octavesComplete = Math.floor(foundTestNotes.length / octaveScaleNotes.length);
-    if(foundTestNotes.length > 0) {
-      expectedOctave = foundTestNotes[0].octave + octavesComplete;
-    }
+
     if(nextNoteIndex >= octaveScaleNotes.length) {      
       nextNoteIndex = nextNoteIndex - (octaveScaleNotes.length * Math.floor(octavesComplete));
-      expectedOctave = foundTestNotes[0].octave + octavesComplete;
     }
+
     const expectedNote = octaveScaleNotes[nextNoteIndex];
+
+    if(foundTestNotes.length > 0) {
+      expectedOctave = foundTestNotes[foundTestNotes.length - 1].octave;
+      if(octaveScaleNotes[0] === "C" && expectedNote === "C") {
+        expectedOctave++;
+      } else {
+        const previousNoteIndex = notes.indexOf(foundTestNotes[foundTestNotes.length - 1].note);
+        const thisNoteIndex = notes.indexOf(expectedNote);
+        if(thisNoteIndex < previousNoteIndex) {
+          expectedOctave++;
+        }
+      }
+    }
+
+    
     if(note.note == expectedNote) {
       if(expectedOctave && note.octave !== expectedOctave) return;
       setFoundTestNotes([...foundTestNotes, {...note}]);
