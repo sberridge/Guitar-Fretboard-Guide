@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useContext, useState } from 'react';
 import Fretboard from './guitar/fretboard';
 import FretboardControls from './guitar/fretboardControls';
-import { availableTunings } from '../lib/tunings';
+import { Tunings } from '../lib/tunings';
 import ScaleDisplay from './guitar/scaleDisplay';
 import note from './types/note';
 import getScaleFrequencies from './functions/getScaleFrequencies';
@@ -22,7 +22,7 @@ const Guitar = () => {
 
   const [testing, setTesting] = useState(false);
   const [foundTestNotes, setFoundTestNotes] = useState<note[]>([]);
-  const [tuning, setTuning] = useState<availableTunings>("standard");
+  const [tuning, setTuning] = useState<Tunings>(Tunings.standard);
   const [scaleNotes, setScaleNotes] = useState<string[]>([]);
   const [scaleFrequencies, setScaleFrequencies] = useState<number[]>([]);
   const [scale, setScale] = useState("");
@@ -31,7 +31,7 @@ const Guitar = () => {
   
 
   const tuningHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
-    const newTuning:availableTunings = e.target.value as availableTunings;
+    const newTuning:Tunings = e.target.value as Tunings;
     setTuning(newTuning);    
   };
   const showNotesHandler = (e:ChangeEvent<HTMLInputElement>)=>{

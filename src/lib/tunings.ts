@@ -1,8 +1,15 @@
 import note from "../components/types/note";
 
-type availableTunings = "standard" | "dropd" | "dadgad" | "ddropd" | "opend";
-const tunings:Map<availableTunings,note[]> = new Map([
-    ["standard", [
+enum Tunings {
+    "standard"="standard",
+    "dropd"="dropd",
+    "dadgad"="dadgad",
+    "ddropd"="ddropd",
+    "opend"="opend"
+}
+
+const tuningNotes:Map<Tunings,note[]> = new Map([
+    [Tunings.standard, [
         {
             "note": "E",
             "octave": 4
@@ -28,7 +35,7 @@ const tunings:Map<availableTunings,note[]> = new Map([
             "octave": 2
         }
     ]],
-    ["dropd", [
+    [Tunings.dropd, [
         {
             "note": "E",
             "octave": 4
@@ -54,7 +61,7 @@ const tunings:Map<availableTunings,note[]> = new Map([
             "octave": 2
         }
     ]],
-    ["ddropd", [
+    [Tunings.ddropd, [
         {
             "note": "D",
             "octave": 4
@@ -80,7 +87,7 @@ const tunings:Map<availableTunings,note[]> = new Map([
             "octave": 2
         }
     ]],
-    ["dadgad",[
+    [Tunings.dadgad,[
         {
             "note": "D",
             "octave": 4
@@ -106,7 +113,7 @@ const tunings:Map<availableTunings,note[]> = new Map([
             "octave": 2
         }
     ]],
-    ["opend", [
+    [Tunings.opend, [
         {
             "note": "D",
             "octave": 4
@@ -134,6 +141,6 @@ const tunings:Map<availableTunings,note[]> = new Map([
     ]]
 ]);
 
-export { tunings };
+export { tuningNotes };
 
-export type { availableTunings };
+export { Tunings };
