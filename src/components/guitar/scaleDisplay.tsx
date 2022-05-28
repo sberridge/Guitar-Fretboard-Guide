@@ -5,11 +5,11 @@ import Note from "./note";
 type scaleDisplayProps = {
     scaleNotes: string[]
     scaleFrequencies: number[]
-    testing: boolean
+    inScaleGame: boolean
     onPlayScale: MouseEventHandler<HTMLButtonElement>
-    toggleTesting: ()=>void
+    toggleScaleGame: ()=>void
 }
-export default function ScaleDisplay({scaleFrequencies,scaleNotes,onPlayScale, testing, toggleTesting}:scaleDisplayProps) {
+export default function ScaleDisplay({scaleFrequencies,scaleNotes,onPlayScale, inScaleGame, toggleScaleGame}:scaleDisplayProps) {
     const renderScaleNotes = ()=>{
         return scaleNotes.map((note,i)=>{
             return <Note
@@ -31,7 +31,7 @@ export default function ScaleDisplay({scaleFrequencies,scaleNotes,onPlayScale, t
                 <button className="play-button" onClick={onPlayScale}></button>
             </div>
             <div className="column">
-                <button className={`button is-small ${testing ? "is-danger" : "is-info"}`} onClick={toggleTesting}>{testing ? "Exit" : "Test Yourself"}</button>
+                <button className={`button is-small ${inScaleGame ? "is-danger" : "is-info"}`} onClick={toggleScaleGame}>{inScaleGame ? "Exit" : "Test Yourself"}</button>
             </div>
         </div>
     </div>;

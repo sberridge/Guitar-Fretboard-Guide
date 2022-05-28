@@ -11,7 +11,7 @@ const getScaleLabel = (scaleNotes:string[], note:string) => {
     return fretScaleNum;
 };
 
-const getFrets = (stringNum:string, note:number, octave:number, scaleNotes:string[], showAllNotes:boolean, testing:boolean, foundTestNotes:note[]):fret[] => {
+const getFrets = (stringNum:string, note:number, octave:number, scaleNotes:string[], showAllNotes:boolean, inScaleGame:boolean, foundScaleGameNotes:note[]):fret[] => {
     const frets:fret[] = [];
     for(let fretNum = 0; fretNum < 13; fretNum++) {
         if(note >= notes.length) {
@@ -27,8 +27,8 @@ const getFrets = (stringNum:string, note:number, octave:number, scaleNotes:strin
         frets.push({
             note: fretNote,
             octave: octave,
-            noteVisible: !testing || foundTestNotes.some((note)=>{return note.note === fretNote && note.octave === octave;}),
-            visible: testing || scaleNotes.length == 0 && showAllNotes || scaleNotes.includes(fretNote),
+            noteVisible: !inScaleGame || foundScaleGameNotes.some((note)=>{return note.note === fretNote && note.octave === octave;}),
+            visible: inScaleGame || scaleNotes.length == 0 && showAllNotes || scaleNotes.includes(fretNote),
             scaleNum: fretScaleNum,
             fretKey: "fret-" + stringNum + "-" + fretNum.toString()
         });

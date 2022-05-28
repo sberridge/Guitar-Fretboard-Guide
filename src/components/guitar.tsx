@@ -20,8 +20,8 @@ const Guitar = () => {
   
   const audioPlayer = useContext(audioPlayerContext);
 
-  const [testing, setTesting] = useState(false);
-  const [foundTestNotes, setFoundTestNotes] = useState<note[]>([]);
+  const [inScaleGame, setInScaleGame] = useState(false);
+  const [foundScaleGameNotes, setFoundScaleGameNotes] = useState<note[]>([]);
   const [tuning, setTuning] = useState<Tunings>(Tunings.standard);
   const [scaleNotes, setScaleNotes] = useState<string[]>([]);
   const [scaleFrequencies, setScaleFrequencies] = useState<number[]>([]);
@@ -43,7 +43,7 @@ const Guitar = () => {
       setScaleNotes([]);
       setScaleRoot(newScaleRoot);
       setScale(newScale);
-      setTesting(false);
+      setInScaleGame(false);
       return;
     }
     
@@ -57,7 +57,7 @@ const Guitar = () => {
     setScale(newScale);
     setScaleRoot(newScaleRoot);
     setScaleNotes(newScaleNotes);
-    setFoundTestNotes([]);
+    setFoundScaleGameNotes([]);
   };
 
   const scaleRootHandler = (e:ChangeEvent<HTMLSelectElement>)=>{
@@ -85,27 +85,27 @@ const Guitar = () => {
     playScale([...scaleFrequencies], audioPlayer);
   };
 
-  const toggleTesting = ()=>{
-    if(testing) {
-      setFoundTestNotes([]);
+  const toggleScaleGame = ()=>{
+    if(inScaleGame) {
+      setFoundScaleGameNotes([]);
     }
-    setTesting(!testing);
+    setInScaleGame(!inScaleGame);
   };
 
   const noteClickHandler = (note:note)=>{
-    if(!testing) return;
+    if(!inScaleGame) return;
     const octaveScaleNotes = [...scaleNotes].slice(0, scaleNotes.length-1);    
 
-    const expectedNote = getExpectedNote(octaveScaleNotes, foundTestNotes.length);
-    const expectedOctave = getExpectedOctave(octaveScaleNotes[0], expectedNote, foundTestNotes);
+    const expectedNote = getExpectedNote(octaveScaleNotes, foundScaleGameNotes.length);
+    const expectedOctave = getExpectedOctave(octaveScaleNotes[0], expectedNote, foundScaleGameNotes);
     
     if(note.note == expectedNote) {
       if(expectedOctave && note.octave !== expectedOctave) return;
-      setFoundTestNotes([...foundTestNotes, {...note}]);
+      setFoundScaleGameNotes([...foundScaleGameNotes, {...note}]);
     }
   };
 
-  const newGuitarStrings = createStrings(tuning, showAllNotes, scaleNotes, testing, foundTestNotes);
+  const newGuitarStrings = createStrings(tuning, showAllNotes, scaleNotes, inScaleGame, foundScaleGameNotes);
 
   return (
     <div>
@@ -119,9 +119,9 @@ const Guitar = () => {
         <ScaleDisplay
           scaleNotes={scaleNotes.slice(0,8)}
           scaleFrequencies={scaleFrequencies}
-          testing={testing}
+          inScaleGame={inScaleGame}
           onPlayScale={playScaleHandler}
-          toggleTesting={toggleTesting}
+          toggleScaleGame={toggleScaleGame}
         ></ScaleDisplay>
       }
       <div className='guitar'>
